@@ -1,0 +1,205 @@
+---
+import type { CollectionEntry } from "astro:content";
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import FormattedDate from "../components/FormattedDate.astro";
+import {
+	CATEGORY_LABELS,
+	hsSlug,
+	slugifyTag,
+	type BlogCategory,
+} from "../utils/blog";
+
+type Props = CollectionEntry<"blog">["data"];
+
+const {
+	title,
+	description,
+	pubDate,
+	updatedDate,
+	heroImage,
+	category,
+	tags,
+	hsCodes,
+	effectiveDate,
+	legalBasis,
+} = Astro.props;
+
+const categoryLabel = CATEGORY_LABELS[category as BlogCategory];
+const ogImage = heroImage ?? "/favicon.svg";
+---
+
+<html lang="vi">
+	<head>
+		<BaseHead title={title} description={description} image={ogImage} />
+		<style>
+			main {
+				width: calc(100% - 2em);
+				max-width: 100%;
+				margin: 0;
+			}
+			.hero-image {
+				width: 100%;
+			}
+			.hero-image img {
+				display: block;
+				margin: 0 auto;
+				border-radius: 12px;
+				box-shadow: var(--box-shadow);
+			}
+			.prose {
+				width: 720px;
+				max-width: calc(100% - 2em);
+				margin: auto;
+				padding: 1em;
+				color: rgb(var(--gray-dark));
+			}
+			.title {
+				margin-bottom: 1em;
+				padding: 1em 0;
+				text-align: center;
+				line-height: 1;
+			}
+			.title h1 {
+				margin: 0 0 0.5em 0;
+			}
+			.date {
+				margin-bottom: 0.5em;
+				color: rgb(var(--gray));
+			}
+			.last-updated-on {
+				font-style: italic;
+			}
+			.meta-panel {
+				background: rgb(var(--gray-light));
+				border-radius: 12px;
+				padding: 1rem 1.25rem;
+				margin-bottom: 1.5rem;
+				text-align: left;
+				font-size: 0.95rem;
+			}
+			.meta-panel h2 {
+				font-size: 1.1rem;
+				margin: 0 0 0.75rem 0;
+			}
+			.meta-row {
+				margin: 0.35rem 0;
+			}
+			.badge {
+				display: inline-block;
+				background: var(--accent);
+				color: #fff;
+				padding: 0.2em 0.55em;
+				border-radius: 6px;
+				font-size: 0.85rem;
+				text-decoration: none;
+				margin-right: 0.35rem;
+			}
+			.badge.secondary {
+				background: rgb(var(--gray));
+			}
+			.legal-list {
+				margin: 0.25rem 0 0 1.1rem;
+				padding: 0;
+			}
+			.disclaimer {
+				margin-top: 2rem;
+				padding-top: 1rem;
+				border-top: 1px solid rgb(var(--gray-light));
+				font-size: 0.9rem;
+				color: rgb(var(--gray));
+			}
+		</style>
+	</head>
+
+	<body>
+		<Header />
+		<main>
+			<article>
+				<div class="hero-image">
+					{heroImage && <img width={1020} height={510} src={heroImage} alt="" />}
+				</div>
+				<div class="prose">
+					<div class="title">
+						<p class="date">
+							<a class="badge" href={`/blog/chu-de/${category}/`}>{categoryLabel}</a>
+							<FormattedDate date={pubDate} />
+							{
+								updatedDate && (
+									<span class="last-updated-on">
+										{" "}
+										· Cập nhật <FormattedDate date={updatedDate} />
+									</span>
+								)
+							}
+						</p>
+						<h1>{title}</h1>
+						<hr />
+					</div>
+
+					<div class="meta-panel">
+						<h2>Thông tin tra cứu</h2>
+						{
+							effectiveDate && (
+								<p class="meta-row">
+									<strong>Hiệu lực / thời điểm tham chiếu:</strong>{" "}
+									<FormattedDate date={effectiveDate} />
+								</p>
+							)
+						}
+						{
+							hsCodes.length > 0 && (
+								<p class="meta-row">
+									<strong>Mã HS gợi ý:</strong>{" "}
+									{hsCodes.map((code) => (
+										<a class="badge secondary" href={`/blog/hs/${hsSlug(code)}/`}>
+											{code}
+										</a>
+									))}
+								</p>
+							)
+						}
+						{
+							tags.length > 0 && (
+								<p class="meta-row">
+									<strong>Nhãn:</strong>{" "}
+									{tags.map((tag) => (
+										<a class="badge secondary" href={`/blog/nhan/${slugifyTag(tag)}/`}>
+											{tag}
+										</a>
+									))}
+								</p>
+							)
+						}
+						{
+							legalBasis.length > 0 && (
+								<div class="meta-row">
+									<strong>Căn cứ pháp lý</strong>
+									<ul class="legal-list">
+										{legalBasis.map((ref) => (
+											<li>
+												<a href={ref.href} target="_blank" rel="noopener noreferrer">
+													{ref.label}
+												</a>
+											</li>
+										))}
+									</ul>
+								</div>
+							)
+						}
+					</div>
+
+					<slot />
+
+					<p class="disclaimer">
+						Nội dung mang tính hỗ trợ tra cứu và diễn giải; quyết định pháp lý cuối cùng thuộc văn
+						bản do cơ quan nhà nước có thẩm quyền ban hành. Vui lòng đối chiếu bản chính và tham
+						vấn chuyên gia khi áp dụng vào hồ sơ cụ thể.
+					</p>
+				</div>
+			</article>
+		</main>
+		<Footer />
+	</body>
+</html>

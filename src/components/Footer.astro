@@ -1,0 +1,36 @@
+---
+const today = new Date();
+---
+
+<footer>
+	<p>
+		&copy; {today.getFullYear()} Cổng thông tin chính sách mặt hàng &amp; thủ tục XNK. Nội dung tham khảo —
+		đối chiếu văn bản gốc tại cơ quan có thẩm quyền.
+	</p>
+	<p class="refs">
+		<a href="https://customs.gov.vn/" target="_blank" rel="noopener noreferrer">Tổng cục Hải quan</a>
+		·
+		<a href="https://vntr.moit.gov.vn/vi" target="_blank" rel="noopener noreferrer">VNTR (Bộ Công Thương)</a>
+		·
+		<a href="/rss.xml">RSS</a>
+	</p>
+</footer>
+<style>
+	footer {
+		padding: 2em 1em 6em 1em;
+		background: linear-gradient(var(--gray-gradient)) no-repeat;
+		color: rgb(var(--gray));
+		text-align: center;
+		font-size: 0.95rem;
+	}
+	footer p {
+		margin: 0.5rem 0;
+	}
+	.refs a {
+		color: rgb(var(--gray-dark));
+		text-decoration: none;
+	}
+	.refs a:hover {
+		text-decoration: underline;
+	}
+</style>

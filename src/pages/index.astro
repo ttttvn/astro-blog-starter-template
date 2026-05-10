@@ -1,0 +1,102 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import { getPublishedPosts, CATEGORY_LABELS, type BlogCategory } from "../utils/blog";
+import FormattedDate from "../components/FormattedDate.astro";
+
+const posts = (await getPublishedPosts())
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.slice(0, 4);
+---
+
+<!doctype html>
+<html lang="vi">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<style>
+			.lead {
+				font-size: 1.15rem;
+				margin-bottom: 1.5rem;
+			}
+			.actions {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.75rem;
+				margin: 1.5rem 0 2.5rem;
+			}
+			.actions a {
+				display: inline-block;
+				padding: 0.5rem 1rem;
+				border-radius: 8px;
+				background: var(--accent);
+				color: #fff;
+				text-decoration: none;
+				font-weight: 600;
+			}
+			.actions a.secondary {
+				background: rgb(var(--gray-dark));
+			}
+			.recent h2 {
+				margin-bottom: 0.75rem;
+			}
+			.recent ul {
+				list-style: none;
+				padding: 0;
+				margin: 0;
+			}
+			.recent li {
+				margin-bottom: 1rem;
+				padding-bottom: 1rem;
+				border-bottom: 1px solid rgb(var(--gray-light));
+			}
+			.recent a {
+				text-decoration: none;
+				color: inherit;
+			}
+			.recent a:hover h3 {
+				color: rgb(var(--accent));
+			}
+			.meta {
+				font-size: 0.9rem;
+				color: rgb(var(--gray));
+				margin: 0.25rem 0 0;
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>Chính sách mặt hàng &amp; thủ tục xuất nhập khẩu</h1>
+			<p class="lead">{SITE_DESCRIPTION}</p>
+			<div class="actions">
+				<a href="/blog/">Xem bài viết</a>
+				<a class="secondary" href="/blog/chu-de/">Duyệt theo chủ đề</a>
+			</div>
+			<section class="recent">
+				<h2>Mới cập nhật</h2>
+				<ul>
+					{
+						posts.map((post) => (
+							<li>
+								<a href={`/blog/${post.id}/`}>
+									<h3>{post.data.title}</h3>
+									<p class="meta">
+										{CATEGORY_LABELS[post.data.category as BlogCategory]} ·{" "}
+										<FormattedDate date={post.data.pubDate} />
+									</p>
+									<p>{post.data.description}</p>
+								</a>
+							</li>
+						))
+					}
+				</ul>
+				<p>
+					<a href="/blog/">Toàn bộ danh sách →</a>
+				</p>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>

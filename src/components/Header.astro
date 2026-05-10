@@ -1,0 +1,66 @@
+---
+import HeaderLink from "./HeaderLink.astro";
+import { SITE_TITLE } from "../consts";
+---
+
+<header>
+	<nav>
+		<h2><a href="/">{SITE_TITLE}</a></h2>
+		<div class="internal-links">
+			<HeaderLink href="/">Trang chủ</HeaderLink>
+			<HeaderLink href="/blog">Bài viết</HeaderLink>
+			<HeaderLink href="/blog/chu-de">Chủ đề</HeaderLink>
+			<HeaderLink href="/about">Giới thiệu</HeaderLink>
+		</div>
+	</nav>
+</header>
+<style>
+	header {
+		margin: 0;
+		padding: 0 1em;
+		background: white;
+		box-shadow: 0 2px 8px rgba(var(--black), 5%);
+	}
+	h2 {
+		margin: 0;
+		font-size: 1em;
+		max-width: min(52vw, 22rem);
+		line-height: 1.25;
+	}
+
+	h2 a,
+	h2 a.active {
+		text-decoration: none;
+	}
+	nav {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.75rem;
+		flex-wrap: wrap;
+	}
+	nav a {
+		padding: 1em 0.5em;
+		color: var(--black);
+		border-bottom: 4px solid transparent;
+		text-decoration: none;
+	}
+	nav a.active {
+		text-decoration: none;
+		border-bottom-color: var(--accent);
+	}
+	.internal-links {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-end;
+	}
+	@media (max-width: 720px) {
+		h2 {
+			max-width: 100%;
+		}
+		.internal-links {
+			width: 100%;
+			justify-content: flex-start;
+		}
+	}
+</style>

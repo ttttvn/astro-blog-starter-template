@@ -1,0 +1,70 @@
+---
+import BaseHead from "../../../components/BaseHead.astro";
+import Header from "../../../components/Header.astro";
+import Footer from "../../../components/Footer.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../../../consts";
+import {
+	CATEGORY_LABELS,
+	getPublishedPosts,
+	isBlogCategory,
+	type BlogCategory,
+} from "../../../utils/blog";
+import FormattedDate from "../../../components/FormattedDate.astro";
+
+export async function getStaticPaths() {
+	const keys = Object.keys(CATEGORY_LABELS) as BlogCategory[];
+	return keys.map((category) => ({ params: { category } }));
+}
+
+const { category } = Astro.params;
+if (!category || !isBlogCategory(category)) {
+	return Astro.redirect("/blog/chu-de/");
+}
+
+const label = CATEGORY_LABELS[category];
+const posts = (await getPublishedPosts())
+	.filter((p) => p.data.category === category)
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const title = `${label} — ${SITE_TITLE}`;
+const description = `Danh sách bài viết: ${label}. ${SITE_DESCRIPTION}`;
+---
+
+<!doctype html>
+<html lang="vi">
+	<head>
+		<BaseHead title={title} description={description} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>{label}</h1>
+			<p>
+				<a href="/blog/chu-de/">← Chủ đề</a>
+				{" · "}
+				<a href="/blog/">Tất cả bài</a>
+			</p>
+			<ul>
+				{
+					posts.map((post) => (
+						<li>
+							<a href={`/blog/${post.id}/`}>
+								<strong>{post.data.title}</strong>
+							</a>
+							{" — "}
+							<FormattedDate date={post.data.pubDate} />
+							{post.data.description && (
+								<>
+									<br />
+									<span>{post.data.description}</span>
+								</>
+							)}
+						</li>
+					))
+				}
+			</ul>
+			{posts.length === 0 && <p>Chưa có bài trong chủ đề này.</p>}
+		</main>
+		<Footer />
+	</body>
+</html>
