@@ -10,6 +10,7 @@ import {
 } from "../utils/blog";
 import { normalizeSearchText } from "../utils/search";
 import FormattedDate from "../components/FormattedDate.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
 
 const title = `Tìm toàn văn — ${SITE_TITLE}`;
 const posts = (await getPublishedPosts()).sort(
@@ -112,6 +113,13 @@ const suggestions = q.length === 0 ? posts.slice(0, 6) : [];
 	<body>
 		<Header />
 		<main id="main">
+			<Breadcrumbs
+				items={[
+					{ label: "Trang chủ", href: "/" },
+					{ label: "Công cụ tra cứu", href: "/cong-cu-tra-cuu/" },
+					{ label: "Tìm toàn văn" },
+				]}
+			/>
 			<div class="page-head">
 				<h1>Tìm toàn văn</h1>
 				<p class="hint">

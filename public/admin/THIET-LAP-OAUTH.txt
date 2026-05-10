@@ -41,4 +41,8 @@ THIẾT LẬP DECAP CMS + GITHUB (Cloudflare Workers / không dùng Netlify)
 6) Ảnh upload
    - media_folder: public/uploads — ảnh commit vào repo trong thư mục này.
 
+7) Chuẩn biên tập bài (Markdown / front matter)
+   - Trên site sau khi deploy: https://<domain-của-bạn>/huong-dan-bien-tap/
+   - File nguồn trong repo: src/pages/huong-dan-bien-tap.md
+
 Tài liệu Decap: https://decapcms.org/docs/

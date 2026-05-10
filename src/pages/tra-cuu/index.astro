@@ -13,6 +13,7 @@ import {
 	slugifyTag,
 	type BlogCategory,
 } from "../../utils/blog";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
 
 const title = `Tra cứu — ${SITE_TITLE}`;
 const posts = await getPublishedPosts();
@@ -98,6 +99,13 @@ const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 	<body>
 		<Header />
 		<main id="main">
+			<Breadcrumbs
+				items={[
+					{ label: "Trang chủ", href: "/" },
+					{ label: "Công cụ tra cứu", href: "/cong-cu-tra-cuu/" },
+					{ label: "Chỉ mục tra cứu" },
+				]}
+			/>
 			<section class="intro">
 				<h1>Chỉ mục tra cứu</h1>
 				<p class="lead">
@@ -116,7 +124,7 @@ const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 
 			<section class="block" id="chu-de">
 				<h2>Chuyên mục tin bài</h2>
-				<p class="lead">Bốn chuyên mục nội dung của cổng; mỗi mục dẫn tới danh sách tin tương ứng.</p>
+				<p class="lead">Năm chuyên mục nội dung của cổng; mỗi mục dẫn tới danh sách tin tương ứng.</p>
 				<div class="grid-cards">
 					{
 						categories.map((key) => (

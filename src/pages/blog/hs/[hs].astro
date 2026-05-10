@@ -5,6 +5,7 @@ import Footer from "../../../components/Footer.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../../../consts";
 import { getPublishedPosts, hsSlug } from "../../../utils/blog";
 import FormattedDate from "../../../components/FormattedDate.astro";
+import Breadcrumbs from "../../../components/Breadcrumbs.astro";
 
 export async function getStaticPaths() {
 	const posts = await getPublishedPosts();
@@ -37,6 +38,14 @@ const description = `Danh sách tin bài tham chiếu mã HS ${displayCode}. ${S
 	<body>
 		<Header />
 		<main id="main">
+			<Breadcrumbs
+				items={[
+					{ label: "Trang chủ", href: "/" },
+					{ label: "Công cụ tra cứu", href: "/cong-cu-tra-cuu/" },
+					{ label: "Chỉ mục tra cứu", href: "/tra-cuu/" },
+					{ label: `HS ${displayCode}` },
+				]}
+			/>
 			<h1>Tin theo mã HS: {displayCode}</h1>
 			<p>
 				<a href="/blog/">← Danh sách tin bài</a>
