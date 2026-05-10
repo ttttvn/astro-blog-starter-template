@@ -1,48 +1,83 @@
 THIẾT LẬP DECAP CMS + GITHUB (Cloudflare Workers / không dùng Netlify)
 =======================================================================
 
+QUAN TRỌNG — HAI URL KHÁC NHAU
+--------------------------------
+- SITE URL (site đọc tin Astro): ví dụ https://astro-blog-starter-template.phucnhan218.workers.dev
+  → dùng trong site_url / display_url của Decap, KHÔNG dùng làm backend.base_url.
+- PROXY URL (Worker OAuth): ví dụ https://ten-worker-ban-dat.phucnhan218.workers.dev
+  → CHỈ dùng cho backend.base_url. Phải deploy Worker riêng (decap-proxy).
+- Lỗi DNS_PROBE_FINISHED_NXDOMAIN khi đăng nhập: thường do base_url vẫn là placeholder
+  REPLACE-WITH-OAUTH-PROXY hoặc URL sai — thay bằng PROXY URL thật sau bước deploy.
+
+
 1) Mở giao diện quản trị
-   - Sau khi deploy site: https://<domain-của-bạn>/admin/
+   - Sau khi deploy site: https://<domain-site-của-bạn>/admin/
 
-2) Đăng nhập GitHub qua OAuth (bắt buộc trên môi trường thật)
-   Decap không thể gọi GitHub API trực tiếp từ trình duyệt mà không có máy chủ
-   trung gian giữ CLIENT_SECRET. Cần một Worker OAuth riêng (subdomain/URL riêng).
 
-   Khuyến nghị: dùng mẫu Cloudflare sẵn có hướng dẫn đầy đủ:
-   https://github.com/sterlingwes/decap-proxy
+2) Worker OAuth (bắt buộc trên production) — làm theo thứ tự
+   Decap không gọi GitHub API trực tiếp từ trình duyệt; cần Worker giữ CLIENT_SECRET.
 
-   Tóm tắt bước (theo README của decap-proxy):
-   a) Tạo GitHub OAuth App (Developer settings → OAuth Apps → New)
-      - Homepage URL: URL của Worker proxy (PROXY URL), ví dụ https://xxx.workers.dev
-      - Authorization callback URL: PROXY URL + /callback
-        (ví dụ https://xxx.workers.dev/callback)
-   b) Clone decap-proxy, tạo wrangler.toml, đặt secrets GITHUB_OAUTH_ID và GITHUB_OAUTH_SECRET
-   c) npx wrangler deploy → lấy PROXY URL
-   d) Sửa file public/admin/config.yml trong repo website:
-        backend.base_url: <PROXY URL>
-        backend.auth_endpoint: /auth
-      (đã có sẵn auth_endpoint; chỉ cần thay base_url đúng Worker)
+   Nguồn mẫu: https://github.com/sterlingwes/decap-proxy
 
-3) Sửa repo / domain trong config.yml nếu khác
-   - backend.repo, branch
-   - site_url, display_url (URL đầy đủ của site đọc tin, có https://)
-   - backend.base_url = PROXY URL (Worker decap-proxy); backend.auth_endpoint: /auth
+   A. Chuẩn bị trên máy
+      - Cài Node.js, Git.
+      - Đăng nhập Cloudflare CLI:  npx wrangler login
 
-4) Sau mỗi lần đăng/xoá/sửa bài từ Decap
-   - Decap commit thẳng lên GitHub → pipeline (Workers/Pages) cần build lại
-     thì bài mới mới xuất hiện trên website.
+   B. Clone và cấu hình decap-proxy
+      - git clone https://github.com/sterlingwes/decap-proxy.git
+      - cd decap-proxy
+      - cp wrangler.toml.sample wrangler.toml  (hoặc lệnh tương đương trên Windows)
+      - Mở wrangler.toml: đặt `name = "ten-worker-ban-chon"` (tên này nằm trong URL workers.dev).
 
-5) Thử cục bộ không OAuth (tuỳ chọn)
-   - Trong public/admin/config.yml bỏ comment dòng: local_backend: true
-   - Chạy tại thư mục gốc repo: npx decap-server@latest
-   - Mở http://localhost:4321/admin/ (hoặc cổng dev Astro của bạn)
-   - Nhớ tắt local_backend trước khi push production nếu không dùng chế độ này.
+   C. Secrets GitHub (từ OAuth App — làm bước D trước nếu bạn muốn có Client ID/Secret sẵn)
+      - npx wrangler secret put GITHUB_OAUTH_ID
+      - npx wrangler secret put GITHUB_OAUTH_SECRET
+
+   D. GitHub OAuth App (Settings → Developer settings → OAuth Apps)
+      - Homepage URL: tạm thời có thể điền URL Worker sau khi biết (xem E); hoặc tạo App
+        sau khi deploy và SỬA lại Homepage + Callback cho đúng.
+      - Authorization callback URL:  https://<PROXY URL không có đuôi slash>/callback
+        Ví dụ proxy là https://decap-oauth.phucnhan218.workers.dev
+        thì callback là https://decap-oauth.phucnhan218.workers.dev/callback
+
+   E. Deploy và LẤY PROXY URL
+      - Trong thư mục decap-proxy:  npx wrangler deploy
+      - Xem log: sẽ có URL dạng https://<name-trong-wrangler>.<subdomain>.workers.dev
+      - Hoặc Cloudflare Dashboard → Workers & Pages → chọn Worker vừa deploy → copy URL.
+
+   F. Cập nhật repo website (repo có Astro + public/admin/config.yml)
+      - Mở public/admin/config.yml
+      - Sửa:
+          backend.base_url: https://<PROXY URL đầy đủ, không có /auth ở cuối>
+        Giữ nguyên:
+          backend.auth_endpoint: /auth
+      - Commit, push, deploy lại site để /admin/ đọc config mới.
+
+
+3) Khớp repo / domain
+   - backend.repo, branch khớp GitHub (vd. ttttvn/astro-blog-starter-template, main)
+   - site_url, display_url = URL site đọc tin (https://...), không nhầm với proxy
+
+
+4) Sau khi biên tập bằng Decap
+   - Decap commit lên GitHub → CI/CD / wrangler deploy build lại thì nội dung mới lên site.
+
+
+5) Chỉ dùng máy, không deploy proxy (tuỳ chọn)
+   - Trong public/admin/config.yml bật: local_backend: true
+   - Ở thư mục gốc repo site: npx decap-server@latest
+   - Mở http://localhost:4321/admin/ (cùng lúc npm run dev nếu cần)
+   - Trước khi push production: tắt local_backend (comment hoặc xóa dòng).
+
 
 6) Ảnh upload
-   - media_folder: public/uploads — ảnh commit vào repo trong thư mục này.
+   - media_folder: public/uploads — ảnh commit vào repo.
 
-7) Chuẩn biên tập bài (Markdown / front matter)
-   - Trên site sau khi deploy: https://<domain-của-bạn>/huong-dan-bien-tap/
-   - File nguồn trong repo: src/pages/huong-dan-bien-tap.md
+
+7) Chuẩn biên tập bài
+   - Trên site: /huong-dan-bien-tap/
+   - File nguồn: src/pages/huong-dan-bien-tap.md
+
 
 Tài liệu Decap: https://decapcms.org/docs/
