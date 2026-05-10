@@ -1,0 +1,185 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { SITE_TITLE } from "../consts";
+import {
+	getPublishedPosts,
+	CATEGORY_LABELS,
+	type BlogCategory,
+} from "../utils/blog";
+import { normalizeSearchText } from "../utils/search";
+import FormattedDate from "../components/FormattedDate.astro";
+
+const title = `Tìm kiếm — ${SITE_TITLE}`;
+const posts = (await getPublishedPosts()).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+const qRaw = Astro.url.searchParams.get("q") ?? "";
+const q = qRaw.trim();
+const qn = normalizeSearchText(q);
+
+function postHaystack(p: (typeof posts)[number]): string {
+	return normalizeSearchText(
+		[
+			p.data.title,
+			p.data.description,
+			CATEGORY_LABELS[p.data.category as BlogCategory],
+			...p.data.tags,
+			...p.data.hsCodes,
+		].join(" "),
+	);
+}
+
+const hits =
+	q.length === 0
+		? []
+		: posts.filter((p) => postHaystack(p).includes(qn));
+
+const suggestions = q.length === 0 ? posts.slice(0, 6) : [];
+---
+
+<!doctype html>
+<html lang="vi">
+	<head>
+		<BaseHead
+			title={title}
+			description="Tìm theo tiêu đề, mô tả, chủ đề, nhãn hoặc mã HS trong các bài đã xuất bản."
+		/>
+		<style>
+			.page-head {
+				margin-bottom: 1.5rem;
+			}
+			.search-form {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.5rem;
+				align-items: center;
+				margin-bottom: 1.25rem;
+			}
+			.search-form input[type="search"] {
+				flex: 1;
+				min-width: 12rem;
+				max-width: 28rem;
+			}
+			.hint {
+				color: rgb(var(--gray));
+				font-size: 0.95rem;
+				margin-bottom: 1.5rem;
+			}
+			.count {
+				font-weight: 700;
+				color: var(--brand);
+				margin-bottom: 0.75rem;
+			}
+			.results {
+				list-style: none;
+				padding: 0;
+				margin: 0;
+				display: flex;
+				flex-direction: column;
+				gap: 0.85rem;
+			}
+			.results li {
+				border: 1px solid var(--border);
+				border-radius: var(--radius);
+				padding: 1rem 1.1rem;
+				background: var(--surface);
+			}
+			.results a {
+				text-decoration: none;
+				color: inherit;
+			}
+			.results a:hover h2 {
+				color: var(--accent);
+			}
+			.results h2 {
+				font-size: 1.15rem;
+				margin: 0 0 0.35rem;
+			}
+			.results .meta {
+				font-size: 0.88rem;
+				color: rgb(var(--gray));
+				margin: 0 0 0.35rem;
+			}
+			.results .excerpt {
+				margin: 0;
+				font-size: 0.95rem;
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main id="main">
+			<div class="page-head">
+				<h1>Tìm kiếm</h1>
+				<p class="hint">
+					Gõ từ khóa tiếng Việt (có hoặc không dấu), mã HS, hoặc tên chủ đề. Kết quả lọc trong nội
+					dung các bài trên cổng.
+				</p>
+				<form class="search-form" method="get" action="/tim-kiem/">
+					<label class="sr-only" for="q-main">Từ khóa</label>
+					<input id="q-main" type="search" name="q" value={qRaw} placeholder="Ví dụ: thực phẩm, 0402, tờ khai…" />
+					<button type="submit" class="btn">Tìm</button>
+				</form>
+			</div>
+
+			{
+				q.length > 0 && (
+					<p class="count">
+						{hits.length === 0
+							? "Không có bài phù hợp."
+							: `Tìm thấy ${hits.length} bài.`}
+					</p>
+				)
+			}
+
+			{
+				q.length > 0 && hits.length > 0 && (
+					<ul class="results">
+						{hits.map((post) => (
+							<li>
+								<a href={`/blog/${post.id}/`}>
+									<h2>{post.data.title}</h2>
+									<p class="meta">
+										{CATEGORY_LABELS[post.data.category as BlogCategory]} ·{" "}
+										<FormattedDate date={post.data.pubDate} />
+									</p>
+									<p class="excerpt">{post.data.description}</p>
+								</a>
+							</li>
+						))}
+					</ul>
+				)
+			}
+
+			{
+				q.length === 0 && (
+					<section class="card" aria-labelledby="suggest-h">
+						<h2 id="suggest-h">Bài gần đây</h2>
+						<p class="hint" style="margin-bottom: 1rem;">
+							Hoặc dùng ô tìm phía trên / menu <strong>Tra cứu</strong> để lọc theo chủ đề, HS,
+							nhãn.
+						</p>
+						<ul class="results">
+							{suggestions.map((post) => (
+								<li>
+									<a href={`/blog/${post.id}/`}>
+										<h2>{post.data.title}</h2>
+										<p class="meta">
+											{CATEGORY_LABELS[post.data.category as BlogCategory]} ·{" "}
+											<FormattedDate date={post.data.pubDate} />
+										</p>
+										<p class="excerpt">{post.data.description}</p>
+									</a>
+								</li>
+							))}
+						</ul>
+					</section>
+				)
+			}
+		</main>
+		<Footer />
+	</body>
+</html>

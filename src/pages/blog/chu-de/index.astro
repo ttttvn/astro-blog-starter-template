@@ -5,6 +5,7 @@ import Footer from "../../../components/Footer.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../../../consts";
 import {
 	CATEGORY_LABELS,
+	CATEGORY_HINTS,
 	getPublishedPosts,
 	isBlogCategory,
 	type BlogCategory,
@@ -21,32 +22,75 @@ for (const p of posts) {
 	}
 }
 const title = `Chủ đề — ${SITE_TITLE}`;
+const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 ---
 
 <!doctype html>
 <html lang="vi">
 	<head>
 		<BaseHead title={title} description={SITE_DESCRIPTION} />
+		<style>
+			.grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+				gap: 1rem;
+				margin: 1.5rem 0;
+			}
+			.grid a {
+				text-decoration: none;
+				color: inherit;
+				height: 100%;
+			}
+			.card {
+				height: 100%;
+				transition:
+					border-color 0.15s,
+					box-shadow 0.15s;
+			}
+			.grid a:hover .card {
+				border-color: var(--accent);
+				box-shadow: var(--shadow-md);
+			}
+			.count {
+				display: block;
+				font-size: 0.88rem;
+				color: rgb(var(--gray));
+				font-weight: 600;
+				margin-top: 0.35rem;
+			}
+			.card h2 {
+				margin: 0 0 0.4rem;
+				font-size: 1.1rem;
+				color: var(--brand);
+			}
+			.card p {
+				margin: 0;
+				font-size: 0.92rem;
+			}
+		</style>
 	</head>
 	<body>
 		<Header />
-		<main>
+		<main id="main">
 			<h1>Chủ đề</h1>
-			<p>Chọn nhóm nội dung để xem các bài viết liên quan.</p>
-			<ul>
+			<p>Chọn nhóm nội dung — mỗi thẻ dẫn tới danh sách bài trong nhóm đó.</p>
+			<div class="grid">
 				{
-					(Object.keys(CATEGORY_LABELS) as BlogCategory[]).map((key) => (
-						<li>
-							<a href={`/blog/chu-de/${key}/`}>
-								<strong>{CATEGORY_LABELS[key]}</strong>
-								<span> — {counts[key]} bài</span>
-							</a>
-						</li>
+					categories.map((key) => (
+						<a href={`/blog/chu-de/${key}/`}>
+							<div class="card">
+								<h2>{CATEGORY_LABELS[key]}</h2>
+								<p>{CATEGORY_HINTS[key]}</p>
+								<span class="count">{counts[key]} bài</span>
+							</div>
+						</a>
 					))
 				}
-			</ul>
+			</div>
 			<p>
 				<a href="/blog/">← Tất cả bài viết</a>
+				{" · "}
+				<a href="/tra-cuu/">Tra cứu HS &amp; nhãn</a>
 			</p>
 		</main>
 		<Footer />

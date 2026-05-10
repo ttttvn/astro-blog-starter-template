@@ -1,66 +1,341 @@
 ---
 import HeaderLink from "./HeaderLink.astro";
 import { SITE_TITLE } from "../consts";
+import { CATEGORY_LABELS, type BlogCategory } from "../utils/blog";
+
+const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
+const q = Astro.url.searchParams.get("q") ?? "";
 ---
 
-<header>
-	<nav>
-		<h2><a href="/">{SITE_TITLE}</a></h2>
-		<div class="internal-links">
-			<HeaderLink href="/">Trang chủ</HeaderLink>
-			<HeaderLink href="/blog">Bài viết</HeaderLink>
-			<HeaderLink href="/blog/chu-de">Chủ đề</HeaderLink>
-			<HeaderLink href="/about">Giới thiệu</HeaderLink>
+<header class="site-header">
+	<a class="skip-link" href="#main">Bỏ qua điều hướng, tới nội dung</a>
+
+	<div class="header-top">
+		<div class="header-top-inner">
+			<p class="tagline">Thông tin chính sách mặt hàng · thủ tục xuất nhập khẩu</p>
+			<div class="header-top-links">
+				<a href="/rss.xml">RSS</a>
+				<a href="https://customs.gov.vn/" target="_blank" rel="noopener noreferrer">Hải quan</a>
+				<a href="https://vntr.moit.gov.vn/vi" target="_blank" rel="noopener noreferrer">VNTR</a>
+			</div>
 		</div>
+	</div>
+
+	<div class="header-main">
+		<a class="brand" href="/" aria-label="Về trang chủ">
+			<span class="brand-mark" aria-hidden="true"></span>
+			<span class="brand-text">
+				<strong class="brand-title">{SITE_TITLE}</strong>
+				<span class="brand-sub">Tra cứu nhanh · có căn cứ pháp lý</span>
+			</span>
+		</a>
+
+		<form class="header-search" action="/tim-kiem/" method="get" role="search">
+			<label class="sr-only" for="nav-search-q">Tìm trong bài viết</label>
+			<input
+				id="nav-search-q"
+				type="search"
+				name="q"
+				placeholder="Từ khóa, HS, chủ đề…"
+				value={q}
+				autocomplete="off"
+			/>
+			<button type="submit" class="btn">Tìm</button>
+		</form>
+	</div>
+
+	<nav class="nav-bar" aria-label="Menu chính">
+		<ul class="nav-list">
+			<li>
+				<HeaderLink href="/">Trang chủ</HeaderLink>
+			</li>
+			<li class="has-dropdown">
+				<details class="nav-details">
+					<summary>Nội dung</summary>
+					<div class="dropdown-panel">
+						<HeaderLink href="/blog/" matchPrefix="/blog"
+							>Tất cả bài viết</HeaderLink
+						>
+						<HeaderLink href="/blog/chu-de/">Theo chủ đề (tổng quan)</HeaderLink>
+						<hr class="dropdown-hr" />
+						<p class="dropdown-label">Nhóm chủ đề</p>
+						{
+							categories.map((key) => (
+								<HeaderLink href={`/blog/chu-de/${key}/`} matchPrefix={`/blog/chu-de/${key}`}>
+									{CATEGORY_LABELS[key]}
+								</HeaderLink>
+							))
+						}
+					</div>
+				</details>
+			</li>
+			<li class="has-dropdown">
+				<details class="nav-details">
+					<summary>Tra cứu</summary>
+					<div class="dropdown-panel">
+						<HeaderLink href="/tim-kiem/" matchPrefix="/tim-kiem">Tìm kiếm</HeaderLink>
+						<HeaderLink href="/tra-cuu/" matchPrefix="/tra-cuu">Trung tâm tra cứu</HeaderLink>
+						<HeaderLink href="/blog/chu-de/" matchPrefix="/blog/chu-de"
+							>Lọc theo chủ đề</HeaderLink
+						>
+						<hr class="dropdown-hr" />
+						<p class="dropdown-label">Mã HS có trong cổng</p>
+						<a href="/tra-cuu/#ma-hs">Danh sách mã HS →</a>
+						<p class="dropdown-label">Nhãn (tag)</p>
+						<a href="/tra-cuu/#nhan">Danh sách nhãn →</a>
+					</div>
+				</details>
+			</li>
+			<li>
+				<HeaderLink href="/about">Giới thiệu</HeaderLink>
+			</li>
+		</ul>
 	</nav>
 </header>
+
 <style>
-	header {
-		margin: 0;
-		padding: 0 1em;
-		background: white;
-		box-shadow: 0 2px 8px rgba(var(--black), 5%);
-	}
-	h2 {
-		margin: 0;
-		font-size: 1em;
-		max-width: min(52vw, 22rem);
-		line-height: 1.25;
+	.site-header {
+		position: sticky;
+		top: 0;
+		z-index: 50;
+		background: var(--header-bg);
+		border-bottom: 1px solid var(--border);
+		box-shadow: var(--shadow-sm);
 	}
 
-	h2 a,
-	h2 a.active {
-		text-decoration: none;
+	.skip-link {
+		position: absolute;
+		left: 0.5rem;
+		top: 0.35rem;
+		padding: 0.35rem 0.65rem;
+		background: var(--brand);
+		color: #fff;
+		font-size: 0.85rem;
+		border-radius: var(--radius-sm);
+		transform: translateY(-120%);
+		transition: transform 0.15s ease;
+		z-index: 100;
 	}
-	nav {
+	.skip-link:focus {
+		transform: translateY(0);
+		outline: none;
+	}
+
+	.header-top {
+		background: rgb(15, 76, 110);
+		color: #e0f2fe;
+		font-size: 0.82rem;
+	}
+	.header-top-inner {
+		width: min(var(--layout-max), calc(100% - 1.5rem));
+		margin: 0 auto;
 		display: flex;
+		flex-wrap: wrap;
 		align-items: center;
 		justify-content: space-between;
-		gap: 0.75rem;
-		flex-wrap: wrap;
+		gap: 0.5rem 1rem;
+		padding: 0.35rem 0.75rem;
 	}
-	nav a {
-		padding: 1em 0.5em;
-		color: var(--black);
-		border-bottom: 4px solid transparent;
-		text-decoration: none;
+	.tagline {
+		margin: 0;
 	}
-	nav a.active {
-		text-decoration: none;
-		border-bottom-color: var(--accent);
-	}
-	.internal-links {
+	.header-top-links {
 		display: flex;
 		flex-wrap: wrap;
-		justify-content: flex-end;
+		gap: 0.65rem 1rem;
 	}
+	.header-top-links a {
+		color: #bae6fd;
+		text-decoration: none;
+		font-weight: 600;
+	}
+	.header-top-links a:hover {
+		color: #fff;
+		text-decoration: underline;
+	}
+
+	.header-main {
+		width: min(var(--layout-max), calc(100% - 1.5rem));
+		margin: 0 auto;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem 1.25rem;
+		padding: 0.85rem 0.75rem 0.65rem;
+	}
+
+	.brand {
+		display: flex;
+		align-items: center;
+		gap: 0.65rem;
+		text-decoration: none;
+		color: inherit;
+		max-width: min(100%, 26rem);
+	}
+	.brand:hover .brand-title {
+		color: var(--accent);
+	}
+	.brand-mark {
+		width: 2.5rem;
+		height: 2.5rem;
+		border-radius: var(--radius-sm);
+		background: linear-gradient(135deg, var(--brand), var(--accent));
+		flex-shrink: 0;
+	}
+	.brand-text {
+		display: flex;
+		flex-direction: column;
+		gap: 0.1rem;
+		line-height: 1.2;
+	}
+	.brand-title {
+		font-size: 0.95rem;
+		font-weight: 700;
+		color: rgb(var(--black));
+	}
+	.brand-sub {
+		font-size: 0.78rem;
+		color: rgb(var(--gray));
+		font-weight: 500;
+	}
+
+	.header-search {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: stretch;
+		gap: 0.45rem;
+		flex: 1;
+		min-width: min(100%, 16rem);
+		max-width: 26rem;
+	}
+	.header-search input {
+		flex: 1;
+		min-width: 8rem;
+	}
+	.header-search .btn {
+		padding-left: 1rem;
+		padding-right: 1rem;
+		white-space: nowrap;
+	}
+
+	.nav-bar {
+		width: min(var(--layout-max), calc(100% - 1.5rem));
+		margin: 0 auto;
+		padding: 0 0.5rem 0.5rem;
+		border-top: 1px solid var(--border);
+		background: linear-gradient(to bottom, #fff, var(--surface-elevated));
+	}
+	.nav-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: stretch;
+		gap: 0.15rem 0.25rem;
+	}
+	.nav-list > li > :global(a) {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.55rem 0.75rem;
+		border-radius: var(--radius-sm);
+		color: rgb(var(--black));
+		font-weight: 600;
+		font-size: 0.95rem;
+	}
+	.nav-list > li > :global(a:hover) {
+		background: var(--accent-soft);
+		color: var(--brand);
+	}
+	.nav-list > li > :global(a.active) {
+		background: var(--accent-soft);
+		color: var(--brand-muted);
+	}
+
+	.has-dropdown {
+		position: relative;
+	}
+	.nav-details {
+		position: relative;
+	}
+	.nav-details > summary {
+		list-style: none;
+		cursor: pointer;
+		padding: 0.55rem 0.75rem;
+		border-radius: var(--radius-sm);
+		font-weight: 600;
+		font-size: 0.95rem;
+		color: rgb(var(--black));
+		user-select: none;
+	}
+	.nav-details > summary::-webkit-details-marker {
+		display: none;
+	}
+	.nav-details > summary::after {
+		content: " ▾";
+		font-size: 0.75em;
+		opacity: 0.65;
+	}
+	.nav-details[open] > summary {
+		background: var(--accent-soft);
+		color: var(--brand);
+	}
+	.nav-details > summary:hover {
+		background: var(--accent-soft);
+	}
+
+	.dropdown-panel {
+		position: absolute;
+		left: 0;
+		top: calc(100% + 0.15rem);
+		min-width: min(22rem, calc(100vw - 2rem));
+		max-width: min(28rem, calc(100vw - 1rem));
+		padding: 0.65rem 0.75rem;
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		box-shadow: var(--shadow-md);
+		display: flex;
+		flex-direction: column;
+		gap: 0.2rem;
+		z-index: 60;
+	}
+	.dropdown-panel :global(a) {
+		padding: 0.4rem 0.35rem;
+		border-radius: var(--radius-sm);
+		color: var(--brand);
+		font-weight: 600;
+		font-size: 0.92rem;
+		text-decoration: none;
+	}
+	.dropdown-panel :global(a:hover) {
+		background: var(--surface-elevated);
+	}
+	.dropdown-hr {
+		margin: 0.35rem 0;
+		border: none;
+		border-top: 1px solid var(--border);
+	}
+	.dropdown-label {
+		margin: 0.35rem 0 0.1rem;
+		font-size: 0.72rem;
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+		color: rgb(var(--gray));
+		font-weight: 700;
+	}
+
 	@media (max-width: 720px) {
-		h2 {
+		.header-search {
 			max-width: 100%;
 		}
-		.internal-links {
-			width: 100%;
-			justify-content: flex-start;
+		.dropdown-panel {
+			position: static;
+			margin-top: 0.35rem;
+			box-shadow: none;
+			border: 1px dashed var(--border);
+			max-width: 100%;
 		}
 	}
 </style>

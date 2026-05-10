@@ -1,0 +1,174 @@
+---
+import BaseHead from "../../components/BaseHead.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../../consts";
+import {
+	getPublishedPosts,
+	CATEGORY_LABELS,
+	CATEGORY_HINTS,
+	collectUniqueHsCodes,
+	collectUniqueTags,
+	hsSlug,
+	slugifyTag,
+	type BlogCategory,
+} from "../../utils/blog";
+
+const title = `Tra cứu — ${SITE_TITLE}`;
+const posts = await getPublishedPosts();
+const tags = collectUniqueTags(posts);
+const hsList = collectUniqueHsCodes(posts);
+const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
+---
+
+<!doctype html>
+<html lang="vi">
+	<head>
+		<BaseHead title={title} description={SITE_DESCRIPTION} />
+		<style>
+			.intro {
+				margin-bottom: 2rem;
+			}
+			.toc {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+				gap: 0.75rem;
+				margin-bottom: 2.5rem;
+			}
+			.toc a {
+				display: block;
+				padding: 0.65rem 0.85rem;
+				border-radius: var(--radius-sm);
+				background: var(--surface);
+				border: 1px solid var(--border);
+				text-decoration: none;
+				font-weight: 700;
+				color: var(--brand);
+			}
+			.toc a:hover {
+				border-color: var(--accent);
+				background: var(--accent-soft);
+			}
+			section.block {
+				margin-bottom: 2.5rem;
+				scroll-margin-top: 6rem;
+			}
+			section.block h2 {
+				margin-bottom: 0.5rem;
+			}
+			.lead {
+				color: rgb(var(--gray));
+				margin-top: 0;
+			}
+			.grid-cards {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+				gap: 1rem;
+			}
+			.grid-cards a {
+				text-decoration: none;
+				color: inherit;
+				display: block;
+				height: 100%;
+			}
+			.grid-cards .card:hover {
+				border-color: var(--accent);
+				box-shadow: var(--shadow-md);
+			}
+			.card h3 {
+				margin: 0 0 0.35rem;
+				font-size: 1.05rem;
+				color: var(--brand);
+			}
+			.card p {
+				margin: 0;
+				font-size: 0.92rem;
+				color: rgb(var(--gray-dark));
+			}
+			.pill-wrap {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.45rem;
+			}
+			.pill-wrap a {
+				text-decoration: none;
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main id="main">
+			<section class="intro">
+				<h1>Trung tâm tra cứu</h1>
+				<p class="lead">
+					Chọn kênh phù hợp: chủ đề nội dung, mã HS hoặc nhãn đã gắn trong các bài viết. Liên kết
+					ngoài dẫn tới nguồn chính thống (Hải quan, VNTR).
+				</p>
+			</section>
+
+			<nav class="toc" aria-label="Mục lục trang">
+				<a href="#chu-de">Theo chủ đề</a>
+				<a href="#ma-hs">Theo mã HS</a>
+				<a href="#nhan">Theo nhãn</a>
+				<a href="/tim-kiem/">Tìm kiếm</a>
+			</nav>
+
+			<section class="block" id="chu-de">
+				<h2>Theo chủ đề</h2>
+				<p class="lead">Bốn nhóm nội dung chính của cổng.</p>
+				<div class="grid-cards">
+					{
+						categories.map((key) => (
+							<a href={`/blog/chu-de/${key}/`}>
+								<div class="card">
+									<h3>{CATEGORY_LABELS[key]}</h3>
+									<p>{CATEGORY_HINTS[key]}</p>
+								</div>
+							</a>
+						))
+					}
+				</div>
+				<p style="margin-top: 1rem;">
+					<a href="/blog/chu-de/">Tổng quan chủ đề →</a>
+				</p>
+			</section>
+
+			<section class="block" id="ma-hs">
+				<h2>Mã HS có trong bài viết</h2>
+				<p class="lead">Mỗi mã dẫn tới danh sách bài đang gắn mã đó.</p>
+				{
+					hsList.length === 0 ? (
+						<p>Chưa có mã HS nào được gắn trong bài.</p>
+					) : (
+						<div class="pill-wrap">
+							{hsList.map((code) => (
+								<a class="pill" href={`/blog/hs/${hsSlug(code)}/`}>
+									{code}
+								</a>
+							))}
+						</div>
+					)
+				}
+			</section>
+
+			<section class="block" id="nhan">
+				<h2>Nhãn (tag)</h2>
+				<p class="lead">Các nhãn đang dùng trên các bài xuất bản.</p>
+				{
+					tags.length === 0 ? (
+						<p>Chưa có nhãn nào.</p>
+					) : (
+						<div class="pill-wrap">
+							{tags.map((tag) => (
+								<a class="pill" href={`/blog/nhan/${slugifyTag(tag)}/`}>
+									{tag}
+								</a>
+							))}
+						</div>
+					)
+				}
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>

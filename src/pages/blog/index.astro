@@ -11,6 +11,7 @@ const posts = (await getPublishedPosts()).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 const title = `Bài viết — ${SITE_TITLE}`;
+const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 ---
 
 <!doctype html>
@@ -18,109 +19,128 @@ const title = `Bài viết — ${SITE_TITLE}`;
 	<head>
 		<BaseHead title={title} description={SITE_DESCRIPTION} />
 		<style>
-			main {
-				width: 960px;
-			}
 			.page-intro {
-				margin-bottom: 2rem;
+				margin-bottom: 1.25rem;
 			}
-			.page-intro a {
-				font-weight: 600;
-			}
-			ul.posts {
+			.toolbar {
 				display: flex;
 				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
+				align-items: center;
+				gap: 0.65rem;
+				margin-bottom: 1.75rem;
+				padding: 0.85rem 1rem;
+				background: var(--surface);
+				border: 1px solid var(--border);
+				border-radius: var(--radius);
+			}
+			.toolbar-label {
+				font-size: 0.78rem;
+				font-weight: 800;
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
+				color: rgb(var(--gray));
+				margin-right: 0.25rem;
+			}
+			.chips {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.45rem;
+				flex: 1;
+			}
+			.chips a {
+				text-decoration: none;
+			}
+			ul.posts {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+				gap: 1.25rem;
+				list-style: none;
 				margin: 0;
 				padding: 0;
 			}
-			ul.posts li {
-				width: calc(50% - 1rem);
-			}
-			ul.posts li * {
+			ul.posts li a {
+				display: block;
+				height: 100%;
 				text-decoration: none;
-				transition: 0.2s ease;
+				color: inherit;
+				border: 1px solid var(--border);
+				border-radius: var(--radius);
+				padding: 1rem 1.05rem;
+				background: var(--surface);
+				transition:
+					border-color 0.15s,
+					box-shadow 0.15s;
 			}
-			ul.posts li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul.posts li:first-child .title {
-				font-size: 2.369rem;
+			ul.posts li a:hover {
+				border-color: var(--accent);
+				box-shadow: var(--shadow-md);
 			}
 			.thumb {
 				display: block;
 				width: 100%;
-				aspect-ratio: 2 / 1;
-				border-radius: 12px;
-				margin-bottom: 0.5rem;
+				aspect-ratio: 16 / 9;
+				border-radius: var(--radius-sm);
+				margin-bottom: 0.65rem;
 				background: linear-gradient(
 					135deg,
 					rgba(var(--gray-light), 1) 0%,
-					rgba(var(--gray), 0.25) 100%
+					rgba(13, 148, 136, 0.15) 100%
 				);
-				box-shadow: var(--box-shadow);
 				overflow: hidden;
 			}
 			.thumb img {
 				width: 100%;
 				height: 100%;
 				object-fit: cover;
-				border-radius: 12px;
-			}
-			.title {
-				margin: 0.25rem 0 0 0;
-				color: rgb(var(--black));
-				line-height: 1.2;
-			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
 			}
 			.cat {
 				display: inline-block;
-				margin-top: 0.35rem;
-				font-size: 0.85rem;
-				color: var(--accent-dark);
-				font-weight: 600;
+				font-size: 0.78rem;
+				font-weight: 800;
+				text-transform: uppercase;
+				letter-spacing: 0.04em;
+				color: var(--brand-muted);
+				margin-bottom: 0.35rem;
 			}
-			ul.posts li a:hover h4,
-			ul.posts li a:hover .date {
-				color: rgb(var(--accent));
+			.title {
+				margin: 0 0 0.35rem;
+				font-size: 1.1rem;
+				line-height: 1.3;
+				color: rgb(var(--black));
 			}
-			ul.posts a:hover .thumb {
-				box-shadow:
-					0 2px 8px rgba(var(--gray), 35%),
-					0 12px 28px rgba(var(--gray), 28%);
-			}
-			@media (max-width: 720px) {
-				ul.posts {
-					gap: 0.5em;
-				}
-				ul.posts li {
-					width: 100%;
-					text-align: center;
-				}
-				ul.posts li:first-child {
-					margin-bottom: 0;
-				}
-				ul.posts li:first-child .title {
-					font-size: 1.563em;
-				}
+			.date {
+				margin: 0;
+				font-size: 0.88rem;
+				color: rgb(var(--gray));
 			}
 		</style>
 	</head>
 	<body>
 		<Header />
-		<main>
+		<main id="main">
 			<section class="page-intro">
 				<h1>Bài viết</h1>
 				<p>
-					Lọc theo <a href="/blog/chu-de/">chủ đề</a> hoặc xem toàn bộ danh sách bên dưới.
+					Lọc nhanh theo chủ đề hoặc mở <a href="/tim-kiem/">Tìm kiếm</a> / <a href="/tra-cuu/"
+						>Trung tâm tra cứu</a
+					> để theo HS và nhãn.
 				</p>
 			</section>
+
+			<div class="toolbar" role="navigation" aria-label="Lọc theo chủ đề">
+				<span class="toolbar-label">Chủ đề</span>
+				<div class="chips">
+					<a class="pill" href="/blog/chu-de/">Tất cả nhóm</a>
+					{
+						categories.map((key) => (
+							<a class="pill" href={`/blog/chu-de/${key}/`}>
+								{CATEGORY_LABELS[key]}
+							</a>
+						))
+					}
+				</div>
+			</div>
+
 			<section>
 				<ul class="posts">
 					{
@@ -129,13 +149,11 @@ const title = `Bài viết — ${SITE_TITLE}`;
 								<a href={`/blog/${post.id}/`}>
 									<span class="thumb">
 										{post.data.heroImage && (
-											<img width={720} height={360} src={post.data.heroImage} alt="" />
+											<img width={640} height={360} src={post.data.heroImage} alt="" />
 										)}
 									</span>
-									<span class="cat">
-										{CATEGORY_LABELS[post.data.category as BlogCategory]}
-									</span>
-									<h4 class="title">{post.data.title}</h4>
+									<span class="cat">{CATEGORY_LABELS[post.data.category as BlogCategory]}</span>
+									<h2 class="title">{post.data.title}</h2>
 									<p class="date">
 										<FormattedDate date={post.data.pubDate} />
 									</p>

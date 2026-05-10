@@ -2,35 +2,109 @@
 const today = new Date();
 ---
 
-<footer>
-	<p>
-		&copy; {today.getFullYear()} Cổng thông tin chính sách mặt hàng &amp; thủ tục XNK. Nội dung tham khảo —
-		đối chiếu văn bản gốc tại cơ quan có thẩm quyền.
-	</p>
-	<p class="refs">
-		<a href="https://customs.gov.vn/" target="_blank" rel="noopener noreferrer">Tổng cục Hải quan</a>
-		·
-		<a href="https://vntr.moit.gov.vn/vi" target="_blank" rel="noopener noreferrer">VNTR (Bộ Công Thương)</a>
-		·
-		<a href="/rss.xml">RSS</a>
-	</p>
+<footer class="site-footer">
+	<div class="footer-inner">
+		<div class="footer-brand">
+			<p class="footer-title">Cổng TT chính sách mặt hàng &amp; thủ tục XNK</p>
+			<p class="footer-copy">
+				&copy; {today.getFullYear()} — Nội dung tham khảo; vui lòng đối chiếu văn bản gốc tại cơ quan
+				có thẩm quyền.
+			</p>
+		</div>
+		<div class="footer-col">
+			<h2 class="footer-heading">Nội dung</h2>
+			<ul>
+				<li><a href="/">Trang chủ</a></li>
+				<li><a href="/blog/">Bài viết</a></li>
+				<li><a href="/blog/chu-de/">Chủ đề</a></li>
+				<li><a href="/about">Giới thiệu</a></li>
+			</ul>
+		</div>
+		<div class="footer-col">
+			<h2 class="footer-heading">Tra cứu</h2>
+			<ul>
+				<li><a href="/tim-kiem/">Tìm kiếm</a></li>
+				<li><a href="/tra-cuu/">Trung tâm tra cứu</a></li>
+				<li><a href="/rss.xml">RSS</a></li>
+			</ul>
+		</div>
+		<div class="footer-col">
+			<h2 class="footer-heading">Nguồn ngoài</h2>
+			<ul>
+				<li>
+					<a href="https://customs.gov.vn/" target="_blank" rel="noopener noreferrer">Tổng cục Hải quan</a>
+				</li>
+				<li>
+					<a href="https://vntr.moit.gov.vn/vi" target="_blank" rel="noopener noreferrer">VNTR</a>
+				</li>
+			</ul>
+		</div>
+	</div>
 </footer>
+
 <style>
-	footer {
-		padding: 2em 1em 6em 1em;
-		background: linear-gradient(var(--gray-gradient)) no-repeat;
-		color: rgb(var(--gray));
-		text-align: center;
-		font-size: 0.95rem;
+	.site-footer {
+		margin-top: auto;
+		padding: 2.5rem 1rem;
+		background: rgb(15, 23, 42);
+		color: #94a3b8;
+		font-size: 0.92rem;
 	}
-	footer p {
-		margin: 0.5rem 0;
+	.footer-inner {
+		width: min(var(--layout-max), calc(100% - 1.5rem));
+		margin: 0 auto;
+		display: grid;
+		grid-template-columns: 1.4fr repeat(3, 1fr);
+		gap: 1.5rem 2rem;
+		align-items: start;
 	}
-	.refs a {
-		color: rgb(var(--gray-dark));
+	.footer-title {
+		margin: 0 0 0.5rem;
+		color: #f1f5f9;
+		font-weight: 700;
+		font-size: 1rem;
+	}
+	.footer-copy {
+		margin: 0;
+		line-height: 1.5;
+		max-width: 28ch;
+	}
+	.footer-heading {
+		margin: 0 0 0.65rem;
+		font-size: 0.72rem;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		color: #64748b;
+		font-weight: 700;
+	}
+	.footer-col ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	.footer-col li {
+		margin-bottom: 0.45rem;
+	}
+	.footer-col a {
+		color: #cbd5e1;
 		text-decoration: none;
+		font-weight: 600;
 	}
-	.refs a:hover {
+	.footer-col a:hover {
+		color: #5eead4;
 		text-decoration: underline;
+	}
+	@media (max-width: 900px) {
+		.footer-inner {
+			grid-template-columns: 1fr 1fr;
+		}
+		.footer-brand {
+			grid-column: 1 / -1;
+		}
+	}
+	@media (max-width: 520px) {
+		.footer-inner {
+			grid-template-columns: 1fr;
+		}
 	}
 </style>

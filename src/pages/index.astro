@@ -3,12 +3,19 @@ import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
-import { getPublishedPosts, CATEGORY_LABELS, type BlogCategory } from "../utils/blog";
+import {
+	getPublishedPosts,
+	CATEGORY_LABELS,
+	CATEGORY_HINTS,
+	type BlogCategory,
+} from "../utils/blog";
 import FormattedDate from "../components/FormattedDate.astro";
 
 const posts = (await getPublishedPosts())
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-	.slice(0, 4);
+	.slice(0, 5);
+
+const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 ---
 
 <!doctype html>
@@ -16,66 +23,155 @@ const posts = (await getPublishedPosts())
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<style>
-			.lead {
-				font-size: 1.15rem;
-				margin-bottom: 1.5rem;
+			.hero {
+				background: linear-gradient(135deg, rgb(12, 74, 110) 0%, rgb(15, 118, 110) 100%);
+				color: #f0fdfa;
+				border-radius: var(--radius);
+				padding: 2rem 1.5rem;
+				margin-bottom: 2rem;
+				box-shadow: var(--shadow-md);
 			}
-			.actions {
+			.hero h1 {
+				color: #fff;
+				margin: 0 0 0.75rem;
+				font-size: clamp(1.6rem, 4vw, 2.1rem);
+			}
+			.hero p {
+				margin: 0 0 1.25rem;
+				opacity: 0.95;
+				max-width: 40ch;
+			}
+			.hero-actions {
 				display: flex;
 				flex-wrap: wrap;
-				gap: 0.75rem;
-				margin: 1.5rem 0 2.5rem;
+				gap: 0.65rem;
 			}
-			.actions a {
-				display: inline-block;
-				padding: 0.5rem 1rem;
-				border-radius: 8px;
-				background: var(--accent);
+			.hero .btn {
+				background: #fff;
+				color: var(--brand);
+			}
+			.hero .btn:hover {
+				background: #ecfeff;
+				color: var(--brand-muted);
+			}
+			.hero .btn-ghost {
+				border-color: rgba(255, 255, 255, 0.45);
 				color: #fff;
-				text-decoration: none;
-				font-weight: 600;
 			}
-			.actions a.secondary {
-				background: rgb(var(--gray-dark));
+			.hero .btn-ghost:hover {
+				background: rgba(255, 255, 255, 0.12);
+				color: #fff;
 			}
-			.recent h2 {
+			.section-title {
 				margin-bottom: 0.75rem;
+			}
+			.section-lead {
+				color: rgb(var(--gray));
+				margin: 0 0 1.25rem;
+			}
+			.cat-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+				gap: 1rem;
+				margin-bottom: 2.5rem;
+			}
+			.cat-grid a {
+				text-decoration: none;
+				color: inherit;
+				height: 100%;
+			}
+			.cat-grid .card {
+				height: 100%;
+				transition:
+					border-color 0.15s,
+					box-shadow 0.15s;
+			}
+			.cat-grid .card:hover {
+				border-color: var(--accent);
+				box-shadow: var(--shadow-md);
+			}
+			.cat-grid h3 {
+				margin: 0 0 0.4rem;
+				font-size: 1.05rem;
+				color: var(--brand);
+			}
+			.cat-grid p {
+				margin: 0;
+				font-size: 0.9rem;
+				color: rgb(var(--gray-dark));
 			}
 			.recent ul {
 				list-style: none;
 				padding: 0;
 				margin: 0;
+				display: flex;
+				flex-direction: column;
+				gap: 0.85rem;
 			}
 			.recent li {
-				margin-bottom: 1rem;
-				padding-bottom: 1rem;
-				border-bottom: 1px solid rgb(var(--gray-light));
+				border: 1px solid var(--border);
+				border-radius: var(--radius);
+				padding: 1rem 1.1rem;
+				background: var(--surface);
 			}
 			.recent a {
 				text-decoration: none;
 				color: inherit;
 			}
 			.recent a:hover h3 {
-				color: rgb(var(--accent));
+				color: var(--accent);
+			}
+			.recent h3 {
+				margin: 0 0 0.35rem;
+				font-size: 1.1rem;
 			}
 			.meta {
-				font-size: 0.9rem;
+				font-size: 0.88rem;
 				color: rgb(var(--gray));
-				margin: 0.25rem 0 0;
+				margin: 0 0 0.35rem;
+			}
+			.excerpt {
+				margin: 0;
+				font-size: 0.95rem;
+			}
+			.more {
+				margin-top: 1rem;
 			}
 		</style>
 	</head>
 	<body>
 		<Header />
-		<main>
-			<h1>Chính sách mặt hàng &amp; thủ tục xuất nhập khẩu</h1>
-			<p class="lead">{SITE_DESCRIPTION}</p>
-			<div class="actions">
-				<a href="/blog/">Xem bài viết</a>
-				<a class="secondary" href="/blog/chu-de/">Duyệt theo chủ đề</a>
-			</div>
-			<section class="recent">
-				<h2>Mới cập nhật</h2>
+		<main id="main">
+			<section class="hero">
+				<h1>Chính sách mặt hàng &amp; thủ tục xuất nhập khẩu</h1>
+				<p>{SITE_DESCRIPTION}</p>
+				<div class="hero-actions">
+					<a class="btn" href="/tim-kiem/">Tìm kiếm</a>
+					<a class="btn btn-ghost" href="/tra-cuu/">Trung tâm tra cứu</a>
+					<a class="btn btn-ghost" href="/blog/">Bài viết</a>
+				</div>
+			</section>
+
+			<section aria-labelledby="cat-h">
+				<h2 id="cat-h" class="section-title">Vào theo chủ đề</h2>
+				<p class="section-lead">Chọn đúng nhóm nội dung bạn cần — mỗi nhóm có danh sách bài riêng.</p>
+				<div class="cat-grid">
+					{
+						categories.map((key) => (
+							<a href={`/blog/chu-de/${key}/`}>
+								<div class="card">
+									<h3>{CATEGORY_LABELS[key]}</h3>
+									<p>{CATEGORY_HINTS[key]}</p>
+								</div>
+							</a>
+						))
+					}
+				</div>
+			</section>
+
+			<section class="recent" aria-labelledby="recent-h">
+				<h2 id="recent-h" class="section-title">Mới cập nhật</h2>
+				<p class="section-lead">Các bài gần nhất; dùng menu <strong>Tra cứu</strong> hoặc ô tìm trên đầu trang để lọc sâu hơn.</p>
 				<ul>
 					{
 						posts.map((post) => (
@@ -86,14 +182,14 @@ const posts = (await getPublishedPosts())
 										{CATEGORY_LABELS[post.data.category as BlogCategory]} ·{" "}
 										<FormattedDate date={post.data.pubDate} />
 									</p>
-									<p>{post.data.description}</p>
+									<p class="excerpt">{post.data.description}</p>
 								</a>
 							</li>
 						))
 					}
 				</ul>
-				<p>
-					<a href="/blog/">Toàn bộ danh sách →</a>
+				<p class="more">
+					<a class="btn btn-ghost" href="/blog/">Toàn bộ bài viết →</a>
 				</p>
 			</section>
 		</main>

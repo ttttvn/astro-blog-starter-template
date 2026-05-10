@@ -1,15 +1,37 @@
 ---
-import type { HTMLAttributes } from 'astro/types';
+import type { HTMLAttributes } from "astro/types";
 
-type Props = HTMLAttributes<'a'>;
+type Props = HTMLAttributes<"a"> & {
+	/** Kích hoạt khi pathname bắt đầu bằng chuỗi này (vd /blog). */
+	matchPrefix?: string;
+};
 
-const { href, class: className, ...props } = Astro.props;
-const pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL, '');
-const subpath = pathname.match(/[^\/]+/g);
-const isActive = href === pathname || href === '/' + (subpath?.[0] || '');
+const { href, class: className, matchPrefix, ...props } = Astro.props;
+const pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL, "");
+const normalizedPath =
+	pathname.length > 1 && pathname.endsWith("/")
+		? pathname.slice(0, -1)
+		: pathname;
+const hrefStr = typeof href === "string" ? href : "";
+const normalizedHref =
+	hrefStr.length > 1 && hrefStr.endsWith("/") ? hrefStr.slice(0, -1) : hrefStr;
+const subpath = normalizedPath.match(/[^/]+/g);
+const rootMatch =
+	normalizedHref === normalizedPath ||
+	normalizedHref === "/" + (subpath?.[0] || "");
+const prefixActive =
+	matchPrefix &&
+	(normalizedPath === matchPrefix ||
+		normalizedPath.startsWith(matchPrefix + "/"));
+const isActive = rootMatch || Boolean(prefixActive);
 ---
 
-<a href={href} class:list={[className, { active: isActive }]} {...props}>
+<a
+	href={href}
+	class:list={[className, { active: isActive }]}
+	aria-current={isActive ? "page" : undefined}
+	{...props}
+>
 	<slot />
 </a>
 <style>
@@ -18,7 +40,6 @@ const isActive = href === pathname || href === '/' + (subpath?.[0] || '');
 		text-decoration: none;
 	}
 	a.active {
-		font-weight: bolder;
-		text-decoration: underline;
+		font-weight: 700;
 	}
 </style>
