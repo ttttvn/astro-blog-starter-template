@@ -4,12 +4,42 @@ import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import Header from "../../components/Header.astro";
 import Footer from "../../components/Footer.astro";
 import { SITE_TITLE } from "../../consts";
+
+const personas = [
+	{
+		title: "Kinh doanh / Thu mua",
+		blurb: "Quyết định trước hợp đồng: rủi ro mặt hàng, điều kiện XNK, thời gian làm hồ sơ.",
+		links: [
+			{ label: "Rà soát cấm & hạn chế", href: "/blog/chu-de/cam-han-che/", track: "persona-kd-ban" },
+			{ label: "XNK có điều kiện", href: "/blog/chu-de/xnk-co-dieu-kien/", track: "persona-kd-dk" },
+			{ label: "Tìm toàn văn nhanh", href: "/tim-kiem/", track: "persona-kd-search" },
+		],
+	},
+	{
+		title: "Phòng chứng từ / XNK",
+		blurb: "Vận hành tờ khai và bộ hồ sơ: checklist, HS, nhãn, tham chiếu pháp lý.",
+		links: [
+			{ label: "Luồng nhập khẩu", href: "/blog/chu-de/nhom-hang-nhap-khau/", track: "persona-ct-nk" },
+			{ label: "Kiểm tra chuyên ngành", href: "/blog/chu-de/kiem-tra-chuyen-nganh/", track: "persona-ct-kcn" },
+			{ label: "Chỉ mục HS & nhãn", href: "/tra-cuu/", track: "persona-ct-index" },
+		],
+	},
+	{
+		title: "Quản lý / Kiểm soát rủi ro",
+		blurb: "Khung nội bộ, phân công và cập nhật sau thông quan.",
+		links: [
+			{ label: "Cơ chế & tổ chức XNK", href: "/co-che-to-chuc-xnk/", track: "persona-ql-co-che" },
+			{ label: "Luồng xuất khẩu", href: "/blog/chu-de/nhom-hang-xuat-khau/", track: "persona-ql-xk" },
+			{ label: "RSS cập nhật", href: "/rss.xml", track: "persona-ql-rss" },
+		],
+	},
+] as const;
 ---
 
 <!doctype html>
 <html lang="vi">
 	<head>
-		<BaseHead title={`Dành cho DN XNK | ${SITE_TITLE}`} description="Điểm vào nội dung cho bộ phận chứng từ và xuất nhập khẩu." />
+		<BaseHead title={`Dành cho DN XNK | ${SITE_TITLE}`} description="Điểm vào nội dung theo vai trò: kinh doanh, chứng từ và quản lý XNK." />
 	</head>
 	<body>
 		<Header />
@@ -17,31 +47,48 @@ import { SITE_TITLE } from "../../consts";
 			<Breadcrumbs items={[{ label: "Trang chủ", href: "/" }, { label: "Dành cho DN XNK" }]} />
 			<h1>Dành cho doanh nghiệp XNK</h1>
 			<p>
-				Trang này gom các đường dẫn vận hành nhanh cho đội chứng từ: đọc tổng mục, tra cứu nhanh, và theo dõi bài mới.
+				Chọn đúng vai trò trong doanh nghiệp để vào nhanh nhóm nội dung phù hợp. Các đường dẫn dưới đây bám
+				taxonomy hiện có trên cổng.
 			</p>
+
+			<section class="personas" aria-label="Lối tắt theo vai trò">
+				{
+					personas.map((p) => (
+						<article class="persona-card card">
+							<h2>{p.title}</h2>
+							<p class="persona-blurb">{p.blurb}</p>
+							<ul class="persona-links">
+								{p.links.map((l) => (
+									<li>
+										<a href={l.href} data-track={l.track}>
+											{l.label}
+										</a>
+									</li>
+								))}
+							</ul>
+						</article>
+					))
+				}
+			</section>
+
+			<h2 class="more-h">Thêm lối vào</h2>
 			<div class="grid">
 				<a class="card-link" href="/blog/" data-track="enterprise-post-list">
 					<article class="card">
-						<h2>Tổng mục bài viết</h2>
-						<p>Toàn bộ bài hướng dẫn để đội XNK lọc theo thời gian cập nhật.</p>
+						<h3>Tổng mục bài viết</h3>
+						<p>Toàn bộ bài đã xuất bản, sắp xếp theo thời gian.</p>
 					</article>
 				</a>
 				<a class="card-link" href="/chinh-sach-thu-tuc/" data-track="enterprise-policy">
 					<article class="card">
-						<h2>Danh mục mặt hàng</h2>
-						<p>Đi theo chuyên mục và nhóm chính sách để rà điều kiện quản lý.</p>
-					</article>
-				</a>
-				<a class="card-link" href="/tim-kiem/" data-track="enterprise-search">
-					<article class="card">
-						<h2>Tìm toàn văn</h2>
-						<p>Tra theo từ khóa, mã HS hoặc nhãn khi cần xử lý gấp hồ sơ.</p>
+						<h3>Chính sách & thủ tục</h3>
+						<p>Danh mục theo chuyên mục nghiệp vụ.</p>
 					</article>
 				</a>
 				<a class="card-link" href="/cong-cu-tra-cuu/" data-track="enterprise-tools">
 					<article class="card">
-						<h2>Công cụ tra cứu</h2>
-						<p>Điểm vào theo nhãn, HS và liên kết RSS phục vụ cập nhật nội bộ.</p>
+						<h3>Công cụ tra cứu</h3>
+						<p>Tìm kiếm, chỉ mục và RSS.</p>
 					</article>
 				</a>
 			</div>
@@ -51,18 +98,57 @@ import { SITE_TITLE } from "../../consts";
 </html>
 
 <style>
+	.personas {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+		gap: 1rem;
+		margin: 1.25rem 0 2rem;
+	}
+	.persona-card h2 {
+		margin: 0 0 0.45rem;
+		font-size: 1.08rem;
+		color: var(--brand);
+	}
+	.persona-blurb {
+		margin: 0 0 0.75rem;
+		font-size: 0.92rem;
+		color: rgb(var(--gray-dark));
+		line-height: 1.5;
+	}
+	.persona-links {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.4rem;
+	}
+	.persona-links a {
+		display: inline-block;
+		font-weight: 700;
+		font-size: 0.9rem;
+		color: var(--brand);
+		text-decoration: none;
+	}
+	.persona-links a:hover {
+		color: var(--accent-hover);
+		text-decoration: underline;
+	}
+	.more-h {
+		margin: 0 0 0.75rem;
+		font-size: 1.15rem;
+	}
 	.grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 		gap: 1rem;
-		margin-top: 1rem;
 	}
 	.card-link {
 		text-decoration: none;
 		color: inherit;
 	}
-	.card h2 {
-		font-size: 1.1rem;
+	.card h3 {
+		font-size: 1.05rem;
 		margin-bottom: 0.4rem;
 	}
 	.card p {

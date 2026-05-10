@@ -15,6 +15,15 @@ export const CATEGORY_LABELS: Record<BlogCategory, string> = {
 	"nhom-hang-xuat-khau": "Nhóm hàng xuất khẩu",
 };
 
+/** Nhãn ngắn kiểu “impact” cho danh sách tin (quét nhanh). */
+export const CATEGORY_IMPACT_LABELS: Record<BlogCategory, string> = {
+	"cam-han-che": "Rà soát trước HĐ",
+	"xnk-co-dieu-kien": "Điều kiện & checklist",
+	"kiem-tra-chuyen-nganh": "Chuyên ngành",
+	"nhom-hang-nhap-khau": "Luồng nhập khẩu",
+	"nhom-hang-xuat-khau": "Luồng xuất khẩu",
+};
+
 /** Mô tả ngắn cho menu / trang chủ đề */
 export const CATEGORY_HINTS: Record<BlogCategory, string> = {
 	"cam-han-che": "Rà soát trước ký hợp đồng để tránh nhóm hàng cấm hoặc hạn chế",

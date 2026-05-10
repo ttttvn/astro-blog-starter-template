@@ -7,19 +7,42 @@ import {
 	getPublishedPosts,
 	CATEGORY_LABELS,
 	CATEGORY_HINTS,
+	CATEGORY_IMPACT_LABELS,
 	type BlogCategory,
 } from "../utils/blog";
 import FormattedDate from "../components/FormattedDate.astro";
 
-const posts = (await getPublishedPosts())
-	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-	.slice(0, 5);
+const allPosts = (await getPublishedPosts()).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+const posts = allPosts.slice(0, 5);
 
 const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 const quickStats = [
-	{ label: "Bản ghi tra cứu", value: `${posts.length}+` },
+	{ label: "Bài đã xuất bản", value: `${allPosts.length}` },
 	{ label: "Nhóm chuyên mục", value: `${categories.length}` },
 ];
+
+const workflowSteps = [
+	{
+		title: "Trước hợp đồng",
+		blurb: "Rà HS, cấm/hạn chế và điều kiện nhập — tránh rủi ro ký nhầm mặt hàng.",
+		href: "/blog/chu-de/cam-han-che/",
+		track: "home-workflow-pre-contract",
+	},
+	{
+		title: "Chuẩn bị hồ sơ & tờ khai",
+		blurb: "Checklist chứng từ, điều kiện chuyên ngành và mô tả hàng thống nhất.",
+		href: "/blog/chu-de/xnk-co-dieu-kien/",
+		track: "home-workflow-docs",
+	},
+	{
+		title: "Sau thông quan",
+		blurb: "Đối soát nội bộ, lưu trữ và theo dõi thay đổi pháp lý định kỳ.",
+		href: "/co-che-to-chuc-xnk/",
+		track: "home-workflow-post",
+	},
+] as const;
 ---
 
 <!doctype html>
@@ -226,6 +249,79 @@ const quickStats = [
 				flex-wrap: wrap;
 				gap: 0.6rem;
 			}
+			.workflow {
+				margin-bottom: 2.25rem;
+			}
+			.workflow-steps {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+				gap: 1rem;
+				list-style: none;
+				margin: 0;
+				padding: 0;
+			}
+			.workflow-steps a {
+				display: block;
+				height: 100%;
+				text-decoration: none;
+				color: inherit;
+				border: 1px solid var(--border);
+				border-radius: var(--radius);
+				padding: 1.1rem 1.15rem;
+				background: var(--surface);
+				box-shadow: var(--shadow-sm);
+				transition:
+					border-color 0.15s,
+					box-shadow 0.15s;
+			}
+			.workflow-steps a:hover {
+				border-color: rgba(37, 99, 235, 0.45);
+				box-shadow: var(--shadow-md);
+			}
+			.workflow-steps .step-num {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				width: 1.65rem;
+				height: 1.65rem;
+				border-radius: 999px;
+				background: var(--accent-soft-strong);
+				color: var(--brand-deep);
+				font-weight: 800;
+				font-size: 0.82rem;
+				margin-bottom: 0.5rem;
+			}
+			.workflow-steps h3 {
+				margin: 0 0 0.35rem;
+				font-size: 1.05rem;
+				color: var(--brand-ink);
+			}
+			.workflow-steps p {
+				margin: 0;
+				font-size: 0.9rem;
+				color: rgb(var(--gray-dark));
+				line-height: 1.5;
+			}
+			.workflow-steps .step-cta {
+				display: inline-block;
+				margin-top: 0.65rem;
+				font-size: 0.84rem;
+				font-weight: 700;
+				color: var(--accent);
+			}
+			.impact {
+				display: inline-block;
+				margin-right: 0.45rem;
+				padding: 0.15rem 0.5rem;
+				border-radius: 999px;
+				background: var(--accent-soft-strong);
+				color: var(--brand-ink);
+				font-size: 0.72rem;
+				font-weight: 800;
+				text-transform: uppercase;
+				letter-spacing: 0.04em;
+				vertical-align: middle;
+			}
 		</style>
 	</head>
 	<body>
@@ -251,6 +347,28 @@ const quickStats = [
 						))
 					}
 				</div>
+			</section>
+
+			<section class="workflow" aria-labelledby="workflow-h">
+				<h2 id="workflow-h" class="section-title">Luồng làm việc phổ biến</h2>
+				<p class="section-lead">
+					Ba bước mô phỏng thực tế phòng XNK: từ rà soát trước ký kết đến sau thông quan. Mỗi thẻ mở đúng
+					nhóm nội dung liên quan.
+				</p>
+				<ol class="workflow-steps">
+					{
+						workflowSteps.map((step, i) => (
+							<li>
+								<a href={step.href} data-track={step.track}>
+									<span class="step-num">{i + 1}</span>
+									<h3>{step.title}</h3>
+									<p>{step.blurb}</p>
+									<span class="step-cta">Vào bước này →</span>
+								</a>
+							</li>
+						))
+					}
+				</ol>
 			</section>
 
 			<section aria-labelledby="menu-h">
@@ -317,6 +435,9 @@ const quickStats = [
 								<a href={`/blog/${post.id}/`} data-track="home-latest-post">
 									<h3>{post.data.title}</h3>
 									<p class="meta">
+										<span class="impact">
+											{CATEGORY_IMPACT_LABELS[post.data.category as BlogCategory]}
+										</span>
 										{CATEGORY_LABELS[post.data.category as BlogCategory]} ·{" "}
 										<FormattedDate date={post.data.pubDate} />
 									</p>

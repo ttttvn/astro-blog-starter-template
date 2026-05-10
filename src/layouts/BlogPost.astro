@@ -50,15 +50,85 @@ const ogImage = heroImage ?? "/favicon.svg";
 				border-radius: 12px;
 				box-shadow: var(--shadow-md);
 			}
-			.prose {
-				width: min(var(--prose-max), calc(100% - 2rem));
+			.post-inner {
+				width: min(1120px, calc(100% - 2rem));
 				margin: 0 auto;
-				padding: 1.25rem 1rem 2rem;
-				color: rgb(var(--gray-dark));
+				padding: 1rem 1rem 2.5rem;
+				display: grid;
+				gap: 1.5rem;
+				align-items: start;
+			}
+			@media (min-width: 960px) {
+				.post-inner {
+					grid-template-columns: minmax(0, 1fr) minmax(15rem, 17.5rem);
+				}
+			}
+			.post-main {
+				min-width: 0;
+			}
+			.post-sidebar {
+				min-width: 0;
+			}
+			@media (min-width: 960px) {
+				.post-sidebar {
+					position: sticky;
+					top: 4.75rem;
+					align-self: start;
+					max-height: calc(100vh - 5.5rem);
+					overflow-y: auto;
+				}
+			}
+			.meta-panel {
+				background: var(--surface-elevated);
+				border: 1px solid var(--border);
+				border-radius: var(--radius);
+				padding: 1rem 1.25rem;
+				margin-bottom: 1rem;
+				text-align: left;
+				font-size: 0.92rem;
+			}
+			.post-toc {
+				background: var(--surface);
+				border: 1px solid var(--border);
+				border-radius: var(--radius);
+				padding: 0.85rem 1rem;
+				font-size: 0.88rem;
+			}
+			.post-toc.is-hidden {
+				display: none;
+			}
+			.post-toc h2 {
+				font-size: 0.78rem;
+				text-transform: uppercase;
+				letter-spacing: 0.07em;
+				color: rgb(var(--gray));
+				margin: 0 0 0.55rem;
+			}
+			.post-toc ul {
+				list-style: none;
+				margin: 0;
+				padding: 0;
+			}
+			.post-toc li {
+				margin-bottom: 0.35rem;
+				line-height: 1.35;
+			}
+			.post-toc li.toc-h3 {
+				padding-left: 0.85rem;
+				font-size: 0.84rem;
+			}
+			.post-toc a {
+				color: var(--brand-ink);
+				text-decoration: none;
+				font-weight: 600;
+			}
+			.post-toc a:hover {
+				color: var(--accent);
+				text-decoration: underline;
 			}
 			.title {
 				margin-bottom: 1em;
-				padding: 1em 0;
+				padding: 1em 0 0.5em;
 				text-align: center;
 				line-height: 1;
 			}
@@ -72,17 +142,8 @@ const ogImage = heroImage ?? "/favicon.svg";
 			.last-updated-on {
 				font-style: italic;
 			}
-			.meta-panel {
-				background: var(--surface-elevated);
-				border: 1px solid var(--border);
-				border-radius: var(--radius);
-				padding: 1rem 1.25rem;
-				margin-bottom: 1.5rem;
-				text-align: left;
-				font-size: 0.95rem;
-			}
 			.meta-panel h2 {
-				font-size: 1.1rem;
+				font-size: 1.05rem;
 				margin: 0 0 0.75rem 0;
 			}
 			.meta-row {
@@ -110,12 +171,24 @@ const ogImage = heroImage ?? "/favicon.svg";
 				margin: 0.25rem 0 0 1.1rem;
 				padding: 0;
 			}
+			.article-body {
+				color: rgb(var(--gray-dark));
+				max-width: var(--prose-max);
+				margin: 0 auto;
+			}
+			.article-body :global(h2),
+			.article-body :global(h3) {
+				scroll-margin-top: 5rem;
+			}
 			.disclaimer {
 				margin-top: 2rem;
 				padding-top: 1rem;
 				border-top: 1px solid var(--border);
 				font-size: 0.9rem;
 				color: rgb(var(--gray));
+				max-width: var(--prose-max);
+				margin-left: auto;
+				margin-right: auto;
 			}
 		</style>
 	</head>
@@ -127,96 +200,144 @@ const ogImage = heroImage ?? "/favicon.svg";
 				<div class="hero-image">
 					{heroImage && <img width={1020} height={510} src={heroImage} alt="" />}
 				</div>
-				<div class="prose">
-					<Breadcrumbs
-						items={[
-							{ label: "Trang chủ", href: "/" },
-							{ label: "Chính sách & thủ tục", href: "/chinh-sach-thu-tuc/" },
-							{ label: categoryLabel, href: `/blog/chu-de/${category}/` },
-							{ label: title },
-						]}
-					/>
-					<div class="title">
-						<p class="date">
-							<a class="badge" href={`/blog/chu-de/${category}/`} data-track="post-category">
-								{categoryLabel}
-							</a>
-							<FormattedDate date={pubDate} />
+				<div class="post-inner">
+					<div class="post-main">
+						<Breadcrumbs
+							items={[
+								{ label: "Trang chủ", href: "/" },
+								{ label: "Chính sách & thủ tục", href: "/chinh-sach-thu-tuc/" },
+								{ label: categoryLabel, href: `/blog/chu-de/${category}/` },
+								{ label: title },
+							]}
+						/>
+						<div class="title">
+							<p class="date">
+								<a class="badge" href={`/blog/chu-de/${category}/`} data-track="post-category">
+									{categoryLabel}
+								</a>
+								<FormattedDate date={pubDate} />
+								{
+									updatedDate && (
+										<span class="last-updated-on">
+											{" "}
+											· Cập nhật <FormattedDate date={updatedDate} />
+										</span>
+									)
+								}
+							</p>
+							<h1>{title}</h1>
+							<hr />
+						</div>
+
+						<div id="article-body" class="article-body prose">
+							<slot />
+						</div>
+
+						<p class="disclaimer">
+							Nội dung mang tính hỗ trợ tra cứu và diễn giải; quyết định pháp lý cuối cùng thuộc văn
+							bản do cơ quan nhà nước có thẩm quyền ban hành. Vui lòng đối chiếu bản chính và tham
+							vấn chuyên gia khi áp dụng vào hồ sơ cụ thể.
+						</p>
+					</div>
+
+					<aside class="post-sidebar" aria-label="Thông tin tra cứu và mục lục">
+						<div class="meta-panel">
+							<h2>Thông tin tra cứu</h2>
 							{
-								updatedDate && (
-									<span class="last-updated-on">
-										{" "}
-										· Cập nhật <FormattedDate date={updatedDate} />
-									</span>
+								effectiveDate && (
+									<p class="meta-row">
+										<strong>Hiệu lực / thời điểm tham chiếu:</strong>{" "}
+										<FormattedDate date={effectiveDate} />
+									</p>
 								)
 							}
-						</p>
-						<h1>{title}</h1>
-						<hr />
-					</div>
-
-					<div class="meta-panel">
-						<h2>Thông tin tra cứu</h2>
-						{
-							effectiveDate && (
-								<p class="meta-row">
-									<strong>Hiệu lực / thời điểm tham chiếu:</strong>{" "}
-									<FormattedDate date={effectiveDate} />
-								</p>
-							)
-						}
-						{
-							hsCodes.length > 0 && (
-								<p class="meta-row">
-									<strong>Mã HS gợi ý:</strong>{" "}
-									{hsCodes.map((code) => (
-										<a class="badge secondary" href={`/blog/hs/${hsSlug(code)}/`} data-track="post-hscode">
-											{code}
-										</a>
-									))}
-								</p>
-							)
-						}
-						{
-							tags.length > 0 && (
-								<p class="meta-row">
-									<strong>Nhãn:</strong>{" "}
-									{tags.map((tag) => (
-										<a class="badge secondary" href={`/blog/nhan/${slugifyTag(tag)}/`} data-track="post-tag">
-											{tag}
-										</a>
-									))}
-								</p>
-							)
-						}
-						{
-							legalBasis.length > 0 && (
-								<div class="meta-row">
-									<strong>Căn cứ pháp lý</strong>
-									<ul class="legal-list">
-										{legalBasis.map((ref) => (
-											<li>
-												<a href={ref.href} target="_blank" rel="noopener noreferrer">
-													{ref.label}
-												</a>
-											</li>
+							{
+								hsCodes.length > 0 && (
+									<p class="meta-row">
+										<strong>Mã HS gợi ý:</strong>{" "}
+										{hsCodes.map((code) => (
+											<a class="badge secondary" href={`/blog/hs/${hsSlug(code)}/`} data-track="post-hscode">
+												{code}
+											</a>
 										))}
-									</ul>
-								</div>
-							)
-						}
-					</div>
-
-					<slot />
-
-					<p class="disclaimer">
-						Nội dung mang tính hỗ trợ tra cứu và diễn giải; quyết định pháp lý cuối cùng thuộc văn
-						bản do cơ quan nhà nước có thẩm quyền ban hành. Vui lòng đối chiếu bản chính và tham
-						vấn chuyên gia khi áp dụng vào hồ sơ cụ thể.
-					</p>
+									</p>
+								)
+							}
+							{
+								tags.length > 0 && (
+									<p class="meta-row">
+										<strong>Nhãn:</strong>{" "}
+										{tags.map((tag) => (
+											<a
+												class="badge secondary"
+												href={`/blog/nhan/${slugifyTag(tag)}/`}
+												data-track="post-tag"
+											>
+												{tag}
+											</a>
+										))}
+									</p>
+								)
+							}
+							{
+								legalBasis.length > 0 && (
+									<div class="meta-row">
+										<strong>Căn cứ pháp lý</strong>
+										<ul class="legal-list">
+											{legalBasis.map((ref) => (
+												<li>
+													<a href={ref.href} target="_blank" rel="noopener noreferrer">
+														{ref.label}
+													</a>
+												</li>
+											))}
+										</ul>
+									</div>
+								)
+							}
+						</div>
+						<nav class="post-toc" id="post-toc" aria-label="Mục lục trong bài">
+							<h2>Mục lục</h2>
+							<ul id="article-toc-list"></ul>
+						</nav>
+					</aside>
 				</div>
 			</article>
 		</main>
 		<Footer />
+		<script is:inline>
+			(function () {
+				function buildToc() {
+					var body = document.getElementById("article-body");
+					var tocNav = document.getElementById("post-toc");
+					var list = document.getElementById("article-toc-list");
+					if (!body || !tocNav || !list) return;
+					var headings = body.querySelectorAll("h2, h3");
+					if (headings.length < 2) {
+						tocNav.classList.add("is-hidden");
+						return;
+					}
+					var autoId = 0;
+					headings.forEach(function (h) {
+						if (!h.id) {
+							autoId += 1;
+							h.id = "muc-bai-" + autoId;
+						}
+						var li = document.createElement("li");
+						li.className = h.tagName === "H3" ? "toc-h3" : "toc-h2";
+						var a = document.createElement("a");
+						a.href = "#" + h.id;
+						a.textContent = h.textContent || "";
+						li.appendChild(a);
+						list.appendChild(li);
+					});
+				}
+				if (document.readyState === "loading") {
+					document.addEventListener("DOMContentLoaded", buildToc);
+				} else {
+					buildToc();
+				}
+			})();
+		</script>
 	</body>
 </html>
