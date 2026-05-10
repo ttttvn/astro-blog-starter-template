@@ -40,9 +40,9 @@ const description = `Danh sách bài viết: ${label}. ${SITE_DESCRIPTION}`;
 		<main id="main">
 			<h1>{label}</h1>
 			<p>
-				<a href="/blog/chu-de/">← Chủ đề</a>
+				<a href="/blog/chu-de/">← Chuyên mục</a>
 				{" · "}
-				<a href="/blog/">Tất cả bài</a>
+				<a href="/blog/">Danh sách tin bài</a>
 			</p>
 			<ul>
 				{
@@ -63,7 +63,7 @@ const description = `Danh sách bài viết: ${label}. ${SITE_DESCRIPTION}`;
 					))
 				}
 			</ul>
-			{posts.length === 0 && <p>Chưa có bài trong chủ đề này.</p>}
+			{posts.length === 0 && <p>Chưa có tin bài trong chuyên mục này.</p>}
 		</main>
 		<Footer />
 	</body>

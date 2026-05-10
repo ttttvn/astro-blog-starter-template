@@ -2,11 +2,13 @@
 import type { HTMLAttributes } from "astro/types";
 
 type Props = HTMLAttributes<"a"> & {
-	/** Kích hoạt khi pathname bắt đầu bằng chuỗi này (vd /blog). */
+	/** Kích hoạt khi pathname bằng prefix hoặc là con của prefix. */
 	matchPrefix?: string;
+	/** Phân đoạn đầu tiên sau prefix bị loại (vd chu-de để tách danh sách bài vs chuyên mục). */
+	prefixExclude?: string;
 };
 
-const { href, class: className, matchPrefix, ...props } = Astro.props;
+const { href, class: className, matchPrefix, prefixExclude, ...props } = Astro.props;
 const pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL, "");
 const normalizedPath =
 	pathname.length > 1 && pathname.endsWith("/")
@@ -19,11 +21,23 @@ const subpath = normalizedPath.match(/[^/]+/g);
 const rootMatch =
 	normalizedHref === normalizedPath ||
 	normalizedHref === "/" + (subpath?.[0] || "");
-const prefixActive =
-	matchPrefix &&
+
+let prefixActive =
+	Boolean(matchPrefix) &&
 	(normalizedPath === matchPrefix ||
-		normalizedPath.startsWith(matchPrefix + "/"));
-const isActive = rootMatch || Boolean(prefixActive);
+		Boolean(matchPrefix && normalizedPath.startsWith(matchPrefix + "/")));
+
+if (prefixActive && matchPrefix && prefixExclude) {
+	const after = normalizedPath.startsWith(matchPrefix + "/")
+		? normalizedPath.slice(matchPrefix.length + 1)
+		: "";
+	const firstSeg = after.split("/")[0] ?? "";
+	if (firstSeg === prefixExclude) {
+		prefixActive = false;
+	}
+}
+
+const isActive = rootMatch || prefixActive;
 ---
 
 <a

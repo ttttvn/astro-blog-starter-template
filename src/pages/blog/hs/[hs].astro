@@ -26,7 +26,7 @@ const displayCode =
 	posts.flatMap((p) => p.data.hsCodes).find((c) => hsSlug(c) === hsParam) ?? hsParam;
 
 const title = `Mã HS ${displayCode} — ${SITE_TITLE}`;
-const description = `Bài viết tham chiếu mã HS ${displayCode}. ${SITE_DESCRIPTION}`;
+const description = `Danh sách tin bài tham chiếu mã HS ${displayCode}. ${SITE_DESCRIPTION}`;
 ---
 
 <!doctype html>
@@ -37,9 +37,11 @@ const description = `Bài viết tham chiếu mã HS ${displayCode}. ${SITE_DESC
 	<body>
 		<Header />
 		<main id="main">
-			<h1>Mã HS: {displayCode}</h1>
+			<h1>Tin theo mã HS: {displayCode}</h1>
 			<p>
-				<a href="/blog/">← Bài viết</a>
+				<a href="/blog/">← Danh sách tin bài</a>
+				{" · "}
+				<a href="/tra-cuu/#ma-hs">Danh mục HS</a>
 			</p>
 			<ul>
 				{
@@ -54,7 +56,7 @@ const description = `Bài viết tham chiếu mã HS ${displayCode}. ${SITE_DESC
 					))
 				}
 			</ul>
-			{posts.length === 0 && <p>Chưa có bài gắn mã HS này.</p>}
+			{posts.length === 0 && <p>Chưa có tin bài nào tham chiếu mã HS này.</p>}
 		</main>
 		<Footer />
 	</body>

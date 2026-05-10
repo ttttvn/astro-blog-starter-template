@@ -15,10 +15,10 @@ export const CATEGORY_LABELS: Record<BlogCategory, string> = {
 
 /** Mô tả ngắn cho menu / trang chủ đề */
 export const CATEGORY_HINTS: Record<BlogCategory, string> = {
-	"chinh-sach-mat-hang": "Điều kiện, kiểm tra, biện pháp theo nhóm hàng",
-	"thu-tuc-xnk": "Tờ khai, chứng từ, luồng thông quan",
-	"cap-nhat-van-ban": "Thông báo, văn bản, điểm cần đối chiếu",
-	"huong-dan": "Checklist, FAQ, cách tra cứu",
+	"chinh-sach-mat-hang": "Quy định áp dụng theo nhóm mặt hàng và mã HS",
+	"thu-tuc-xnk": "Khai báo, chứng từ và các bước liên quan thông quan",
+	"cap-nhat-van-ban": "Văn bản mới, sửa đổi và điểm cần đối chiếu",
+	"huong-dan": "Hướng dẫn thực hành, danh mục kiểm tra và tra cứu",
 };
 
 export function isBlogCategory(value: string): value is BlogCategory {

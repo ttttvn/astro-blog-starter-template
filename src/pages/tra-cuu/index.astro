@@ -46,7 +46,7 @@ const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 				color: var(--brand);
 			}
 			.toc a:hover {
-				border-color: var(--accent);
+				border-color: rgba(37, 99, 235, 0.5);
 				background: var(--accent-soft);
 			}
 			section.block {
@@ -72,7 +72,7 @@ const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 				height: 100%;
 			}
 			.grid-cards .card:hover {
-				border-color: var(--accent);
+				border-color: rgba(37, 99, 235, 0.45);
 				box-shadow: var(--shadow-md);
 			}
 			.card h3 {
@@ -99,23 +99,24 @@ const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 		<Header />
 		<main id="main">
 			<section class="intro">
-				<h1>Trung tâm tra cứu</h1>
+				<h1>Chỉ mục tra cứu</h1>
 				<p class="lead">
-					Chọn kênh phù hợp: chủ đề nội dung, mã HS hoặc nhãn đã gắn trong các bài viết. Liên kết
-					ngoài dẫn tới nguồn chính thống (Hải quan, VNTR).
+					Trang này tập hợp các lối vào cố định: chuyên mục tin bài, danh mục mã HS và danh mục nhãn
+					đang được sử dụng trong các tin đã xuất bản. Đối với truy vấn tự do, vui lòng dùng chức
+					năng tìm toàn văn.
 				</p>
 			</section>
 
 			<nav class="toc" aria-label="Mục lục trang">
-				<a href="#chu-de">Theo chủ đề</a>
-				<a href="#ma-hs">Theo mã HS</a>
-				<a href="#nhan">Theo nhãn</a>
-				<a href="/tim-kiem/">Tìm kiếm</a>
+				<a href="#chu-de">Chuyên mục</a>
+				<a href="#ma-hs">Mã HS</a>
+				<a href="#nhan">Nhãn nội dung</a>
+				<a href="/tim-kiem/">Tìm toàn văn</a>
 			</nav>
 
 			<section class="block" id="chu-de">
-				<h2>Theo chủ đề</h2>
-				<p class="lead">Bốn nhóm nội dung chính của cổng.</p>
+				<h2>Chuyên mục tin bài</h2>
+				<p class="lead">Bốn chuyên mục nội dung của cổng; mỗi mục dẫn tới danh sách tin tương ứng.</p>
 				<div class="grid-cards">
 					{
 						categories.map((key) => (
@@ -129,16 +130,19 @@ const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 					}
 				</div>
 				<p style="margin-top: 1rem;">
-					<a href="/blog/chu-de/">Tổng quan chủ đề →</a>
+					<a href="/blog/chu-de/">Tổng quan phân loại chuyên mục</a>
 				</p>
 			</section>
 
 			<section class="block" id="ma-hs">
-				<h2>Mã HS có trong bài viết</h2>
-				<p class="lead">Mỗi mã dẫn tới danh sách bài đang gắn mã đó.</p>
+				<h2>Danh mục mã hàng hóa (HS)</h2>
+				<p class="lead">
+					Các mã HS đang được tham chiếu trong ít nhất một tin bài. Nhấn mã để xem danh sách tin liên
+					quan.
+				</p>
 				{
 					hsList.length === 0 ? (
-						<p>Chưa có mã HS nào được gắn trong bài.</p>
+						<p>Hiện chưa có mã HS nào được gắn trong tin bài.</p>
 					) : (
 						<div class="pill-wrap">
 							{hsList.map((code) => (
@@ -152,11 +156,11 @@ const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 			</section>
 
 			<section class="block" id="nhan">
-				<h2>Nhãn (tag)</h2>
-				<p class="lead">Các nhãn đang dùng trên các bài xuất bản.</p>
+				<h2>Danh mục nhãn nội dung</h2>
+				<p class="lead">Các nhãn đang được gán cho ít nhất một tin bài đã xuất bản.</p>
 				{
 					tags.length === 0 ? (
-						<p>Chưa có nhãn nào.</p>
+						<p>Hiện chưa có nhãn nào được sử dụng.</p>
 					) : (
 						<div class="pill-wrap">
 							{tags.map((tag) => (

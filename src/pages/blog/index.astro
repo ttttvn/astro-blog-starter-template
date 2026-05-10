@@ -119,18 +119,17 @@ const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 		<Header />
 		<main id="main">
 			<section class="page-intro">
-				<h1>Bài viết</h1>
+				<h1>Danh sách tin bài</h1>
 				<p>
-					Lọc nhanh theo chủ đề hoặc mở <a href="/tim-kiem/">Tìm kiếm</a> / <a href="/tra-cuu/"
-						>Trung tâm tra cứu</a
-					> để theo HS và nhãn.
+					Dưới đây là toàn bộ tin đã xuất bản. Có thể lọc nhanh theo chuyên mục, hoặc sử dụng
+					<a href="/tim-kiem/">tìm toàn văn</a> và <a href="/tra-cuu/">chỉ mục HS, nhãn</a>.
 				</p>
 			</section>
 
-			<div class="toolbar" role="navigation" aria-label="Lọc theo chủ đề">
-				<span class="toolbar-label">Chủ đề</span>
+			<div class="toolbar" role="navigation" aria-label="Lọc theo chuyên mục">
+				<span class="toolbar-label">Chuyên mục</span>
 				<div class="chips">
-					<a class="pill" href="/blog/chu-de/">Tất cả nhóm</a>
+					<a class="pill" href="/blog/chu-de/">Tổng quan chuyên mục</a>
 					{
 						categories.map((key) => (
 							<a class="pill" href={`/blog/chu-de/${key}/`}>

@@ -24,17 +24,20 @@ const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<style>
 			.hero {
-				background: linear-gradient(135deg, rgb(12, 74, 110) 0%, rgb(15, 118, 110) 100%);
-				color: #f0fdfa;
+				background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 48%, #2563eb 100%);
+				color: #eff6ff;
 				border-radius: var(--radius);
-				padding: 2rem 1.5rem;
+				padding: 2rem 1.75rem;
 				margin-bottom: 2rem;
 				box-shadow: var(--shadow-md);
+				border: 1px solid rgba(255, 255, 255, 0.12);
 			}
 			.hero h1 {
 				color: #fff;
 				margin: 0 0 0.75rem;
-				font-size: clamp(1.6rem, 4vw, 2.1rem);
+				font-size: clamp(1.55rem, 3.5vw, 2rem);
+				font-weight: 700;
+				letter-spacing: -0.02em;
 			}
 			.hero p {
 				margin: 0 0 1.25rem;
@@ -87,7 +90,7 @@ const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 					box-shadow 0.15s;
 			}
 			.cat-grid .card:hover {
-				border-color: var(--accent);
+				border-color: rgba(37, 99, 235, 0.45);
 				box-shadow: var(--shadow-md);
 			}
 			.cat-grid h3 {
@@ -119,7 +122,7 @@ const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 				color: inherit;
 			}
 			.recent a:hover h3 {
-				color: var(--accent);
+				color: var(--accent-hover);
 			}
 			.recent h3 {
 				margin: 0 0 0.35rem;
@@ -143,18 +146,21 @@ const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 		<Header />
 		<main id="main">
 			<section class="hero">
-				<h1>Chính sách mặt hàng &amp; thủ tục xuất nhập khẩu</h1>
+				<h1>Chính sách mặt hàng và thủ tục xuất nhập khẩu</h1>
 				<p>{SITE_DESCRIPTION}</p>
 				<div class="hero-actions">
-					<a class="btn" href="/tim-kiem/">Tìm kiếm</a>
-					<a class="btn btn-ghost" href="/tra-cuu/">Trung tâm tra cứu</a>
-					<a class="btn btn-ghost" href="/blog/">Bài viết</a>
+					<a class="btn" href="/tim-kiem/">Tìm toàn văn</a>
+					<a class="btn btn-ghost" href="/tra-cuu/">Chỉ mục HS và nhãn</a>
+					<a class="btn btn-ghost" href="/blog/">Danh sách tin bài</a>
 				</div>
 			</section>
 
 			<section aria-labelledby="cat-h">
-				<h2 id="cat-h" class="section-title">Vào theo chủ đề</h2>
-				<p class="section-lead">Chọn đúng nhóm nội dung bạn cần — mỗi nhóm có danh sách bài riêng.</p>
+				<h2 id="cat-h" class="section-title">Chuyên mục tin bài</h2>
+				<p class="section-lead">
+					Nội dung được phân loại theo bốn chuyên mục; mỗi thẻ dưới đây dẫn tới danh sách tin trong
+					chuyên mục tương ứng.
+				</p>
 				<div class="cat-grid">
 					{
 						categories.map((key) => (
@@ -170,8 +176,12 @@ const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 			</section>
 
 			<section class="recent" aria-labelledby="recent-h">
-				<h2 id="recent-h" class="section-title">Mới cập nhật</h2>
-				<p class="section-lead">Các bài gần nhất; dùng menu <strong>Tra cứu</strong> hoặc ô tìm trên đầu trang để lọc sâu hơn.</p>
+				<h2 id="recent-h" class="section-title">Tin mới đăng</h2>
+				<p class="section-lead">
+					Các bài xuất bản gần nhất. Để lọc theo từ khóa, mã HS hoặc nhãn, sử dụng mục <strong
+						>Hỗ trợ tra cứu</strong
+					> trên thanh điều hướng hoặc ô tìm kiếm phía trên.
+				</p>
 				<ul>
 					{
 						posts.map((post) => (
@@ -189,7 +199,7 @@ const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 					}
 				</ul>
 				<p class="more">
-					<a class="btn btn-ghost" href="/blog/">Toàn bộ bài viết →</a>
+					<a class="btn btn-ghost" href="/blog/">Xem toàn bộ tin bài</a>
 				</p>
 			</section>
 		</main>

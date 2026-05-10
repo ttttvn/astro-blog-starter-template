@@ -11,7 +11,7 @@ import {
 import { normalizeSearchText } from "../utils/search";
 import FormattedDate from "../components/FormattedDate.astro";
 
-const title = `Tìm kiếm — ${SITE_TITLE}`;
+const title = `Tìm toàn văn — ${SITE_TITLE}`;
 const posts = (await getPublishedPosts()).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
@@ -45,7 +45,7 @@ const suggestions = q.length === 0 ? posts.slice(0, 6) : [];
 	<head>
 		<BaseHead
 			title={title}
-			description="Tìm theo tiêu đề, mô tả, chủ đề, nhãn hoặc mã HS trong các bài đã xuất bản."
+			description="Tìm kiếm theo tiêu đề, tóm tắt, chuyên mục, nhãn hoặc mã HS trong các tin bài đã xuất bản trên cổng."
 		/>
 		<style>
 			.page-head {
@@ -113,15 +113,21 @@ const suggestions = q.length === 0 ? posts.slice(0, 6) : [];
 		<Header />
 		<main id="main">
 			<div class="page-head">
-				<h1>Tìm kiếm</h1>
+				<h1>Tìm toàn văn</h1>
 				<p class="hint">
-					Gõ từ khóa tiếng Việt (có hoặc không dấu), mã HS, hoặc tên chủ đề. Kết quả lọc trong nội
-					dung các bài trên cổng.
+					Nhập từ khóa tiếng Việt (có hoặc không dấu), số mã HS, tên chuyên mục hoặc nhãn. Hệ thống
+					so khớp trên tiêu đề, phần tóm tắt và các trường phân loại của tin bài.
 				</p>
 				<form class="search-form" method="get" action="/tim-kiem/">
-					<label class="sr-only" for="q-main">Từ khóa</label>
-					<input id="q-main" type="search" name="q" value={qRaw} placeholder="Ví dụ: thực phẩm, 0402, tờ khai…" />
-					<button type="submit" class="btn">Tìm</button>
+					<label class="sr-only" for="q-main">Từ khóa tìm kiếm</label>
+					<input
+						id="q-main"
+						type="search"
+						name="q"
+						value={qRaw}
+						placeholder="Ví dụ: thực phẩm, 0402, hải quan…"
+					/>
+					<button type="submit" class="btn">Thực hiện tìm</button>
 				</form>
 			</div>
 
@@ -129,8 +135,8 @@ const suggestions = q.length === 0 ? posts.slice(0, 6) : [];
 				q.length > 0 && (
 					<p class="count">
 						{hits.length === 0
-							? "Không có bài phù hợp."
-							: `Tìm thấy ${hits.length} bài.`}
+							? "Không có tin bài phù hợp với điều kiện tìm."
+							: `Tìm thấy ${hits.length} tin bài.`}
 					</p>
 				)
 			}
@@ -157,10 +163,10 @@ const suggestions = q.length === 0 ? posts.slice(0, 6) : [];
 			{
 				q.length === 0 && (
 					<section class="card" aria-labelledby="suggest-h">
-						<h2 id="suggest-h">Bài gần đây</h2>
+						<h2 id="suggest-h">Tin xuất bản gần đây</h2>
 						<p class="hint" style="margin-bottom: 1rem;">
-							Hoặc dùng ô tìm phía trên / menu <strong>Tra cứu</strong> để lọc theo chủ đề, HS,
-							nhãn.
+							Để tra theo danh mục cố định, vui lòng sử dụng mục <strong>Hỗ trợ tra cứu</strong> trên
+							thanh điều hướng hoặc trang <a href="/tra-cuu/">chỉ mục HS và nhãn</a>.
 						</p>
 						<ul class="results">
 							{suggestions.map((post) => (

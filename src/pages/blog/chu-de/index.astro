@@ -72,8 +72,11 @@ const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 	<body>
 		<Header />
 		<main id="main">
-			<h1>Chủ đề</h1>
-			<p>Chọn nhóm nội dung — mỗi thẻ dẫn tới danh sách bài trong nhóm đó.</p>
+			<h1>Phân loại theo chuyên mục</h1>
+			<p>
+				Chọn một trong bốn chuyên mục để xem danh sách tin bài thuộc chuyên mục đó. Mỗi thẻ hiển thị
+				số lượng bài hiện có.
+			</p>
 			<div class="grid">
 				{
 					categories.map((key) => (
@@ -88,9 +91,9 @@ const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 				}
 			</div>
 			<p>
-				<a href="/blog/">← Tất cả bài viết</a>
+				<a href="/blog/">← Danh sách tin bài</a>
 				{" · "}
-				<a href="/tra-cuu/">Tra cứu HS &amp; nhãn</a>
+				<a href="/tra-cuu/">Chỉ mục HS và nhãn</a>
 			</p>
 		</main>
 		<Footer />

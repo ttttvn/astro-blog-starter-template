@@ -26,7 +26,7 @@ const displayTag =
 	posts.flatMap((p) => p.data.tags).find((t) => slugifyTag(t) === tagSlug) ?? tagSlug;
 
 const title = `Nhãn «${displayTag}» — ${SITE_TITLE}`;
-const description = `Bài viết gắn nhãn ${displayTag}. ${SITE_DESCRIPTION}`;
+const description = `Danh sách tin bài gắn nhãn «${displayTag}». ${SITE_DESCRIPTION}`;
 ---
 
 <!doctype html>
@@ -37,9 +37,11 @@ const description = `Bài viết gắn nhãn ${displayTag}. ${SITE_DESCRIPTION}`
 	<body>
 		<Header />
 		<main id="main">
-			<h1>Nhãn: {displayTag}</h1>
+			<h1>Tin theo nhãn: {displayTag}</h1>
 			<p>
-				<a href="/blog/">← Bài viết</a>
+				<a href="/blog/">← Danh sách tin bài</a>
+				{" · "}
+				<a href="/tra-cuu/#nhan">Chỉ mục nhãn</a>
 			</p>
 			<ul>
 				{
@@ -54,7 +56,7 @@ const description = `Bài viết gắn nhãn ${displayTag}. ${SITE_DESCRIPTION}`
 					))
 				}
 			</ul>
-			{posts.length === 0 && <p>Không có bài với nhãn này.</p>}
+			{posts.length === 0 && <p>Không có tin bài nào gắn nhãn này.</p>}
 		</main>
 		<Footer />
 	</body>
