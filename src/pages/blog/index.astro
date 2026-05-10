@@ -6,6 +6,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../../consts";
 import { getPublishedPosts } from "../../utils/blog";
 import { CATEGORY_LABELS, type BlogCategory } from "../../utils/blog";
 import FormattedDate from "../../components/FormattedDate.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
 
 const posts = (await getPublishedPosts()).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
@@ -118,6 +119,7 @@ const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 	<body>
 		<Header />
 		<main id="main">
+			<Breadcrumbs items={[{ label: "Trang chủ", href: "/" }, { label: "Chính sách & thủ tục", href: "/chinh-sach-thu-tuc/" }, { label: "Danh sách tin bài" }]} />
 			<section class="page-intro">
 				<h1>Danh sách tin bài</h1>
 				<p>
@@ -129,10 +131,10 @@ const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 			<div class="toolbar" role="navigation" aria-label="Lọc theo chuyên mục">
 				<span class="toolbar-label">Chuyên mục</span>
 				<div class="chips">
-					<a class="pill" href="/blog/chu-de/">Tổng quan chuyên mục</a>
+					<a class="pill" href="/blog/chu-de/" data-track="blog-category-overview">Tổng quan chuyên mục</a>
 					{
 						categories.map((key) => (
-							<a class="pill" href={`/blog/chu-de/${key}/`}>
+							<a class="pill" href={`/blog/chu-de/${key}/`} data-track="blog-category-chip">
 								{CATEGORY_LABELS[key]}
 							</a>
 						))
@@ -145,7 +147,7 @@ const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 					{
 						posts.map((post) => (
 							<li>
-								<a href={`/blog/${post.id}/`}>
+								<a href={`/blog/${post.id}/`} data-track="blog-list-card">
 									<span class="thumb">
 										{post.data.heroImage && (
 											<img width={640} height={360} src={post.data.heroImage} alt="" />

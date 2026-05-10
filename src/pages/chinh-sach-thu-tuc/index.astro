@@ -1,5 +1,6 @@
 ---
 import BaseHead from "../../components/BaseHead.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import Header from "../../components/Header.astro";
 import Footer from "../../components/Footer.astro";
 import { SITE_TITLE } from "../../consts";
@@ -16,6 +17,7 @@ const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 	<body>
 		<Header />
 		<main id="main">
+			<Breadcrumbs items={[{ label: "Trang chủ", href: "/" }, { label: "Chính sách & thủ tục" }]} />
 			<h1>Chính sách & thủ tục</h1>
 			<p>
 				Tổng mục dành cho phân loại theo chế độ quản lý và chuyên mục nghiệp vụ. Mỗi nhóm dưới đây liên kết tới
@@ -24,7 +26,7 @@ const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 			<div class="grid">
 				{
 					categories.map((key) => (
-						<a class="card-link" href={`/blog/chu-de/${key}/`}>
+						<a class="card-link" href={`/blog/chu-de/${key}/`} data-track="policy-landing-card">
 							<article class="card">
 								<h2>{CATEGORY_LABELS[key]}</h2>
 								<p>{CATEGORY_HINTS[key]}</p>
@@ -34,7 +36,7 @@ const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 				}
 			</div>
 			<p>
-				<a class="btn btn-ghost" href="/blog/">Xem toàn bộ bài viết</a>
+				<a class="btn btn-ghost" href="/blog/" data-track="policy-view-all-posts">Xem toàn bộ bài viết</a>
 			</p>
 		</main>
 		<Footer />

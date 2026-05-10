@@ -207,6 +207,25 @@ const quickStats = [
 			.more {
 				margin-top: 1rem;
 			}
+			.newsletter {
+				margin-top: 2.4rem;
+				padding: 1.15rem 1.2rem;
+				border: 1px solid var(--border);
+				border-radius: var(--radius);
+				background: var(--surface);
+			}
+			.newsletter h2 {
+				margin-bottom: 0.45rem;
+			}
+			.newsletter p {
+				margin: 0 0 0.65rem;
+				color: rgb(var(--gray-dark));
+			}
+			.newsletter-actions {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.6rem;
+			}
 		</style>
 	</head>
 	<body>
@@ -217,10 +236,10 @@ const quickStats = [
 				<h1>Cổng thông tin chính sách mặt hàng & thủ tục XNK</h1>
 				<p>{SITE_DESCRIPTION}</p>
 				<div class="hero-actions">
-					<a class="btn" href="/danh-cho-dn-xnk/">Bắt đầu cho DN XNK</a>
-					<a class="btn btn-ghost" href="/chinh-sach-thu-tuc/">Danh mục mặt hàng</a>
-					<a class="btn btn-ghost" href="/tim-kiem/">Tìm toàn văn</a>
-					<a class="btn btn-ghost" href="/about">Liên hệ</a>
+					<a class="btn" href="/danh-cho-dn-xnk/" data-track="home-hero-start">Bắt đầu cho DN XNK</a>
+					<a class="btn btn-ghost" href="/chinh-sach-thu-tuc/" data-track="home-hero-policy">Danh mục mặt hàng</a>
+					<a class="btn btn-ghost" href="/tim-kiem/" data-track="home-hero-search">Tìm toàn văn</a>
+					<a class="btn btn-ghost" href="/about" data-track="home-hero-contact">Liên hệ</a>
 				</div>
 				<div class="quick-stats">
 					{
@@ -240,25 +259,25 @@ const quickStats = [
 					Bốn cụm chính theo mô hình FASTPORT: chính sách, hỗ trợ doanh nghiệp, cơ chế nội bộ và tra cứu.
 				</p>
 				<div class="menu-grid">
-					<a href="/chinh-sach-thu-tuc/">
+					<a href="/chinh-sach-thu-tuc/" data-track="home-quick-policy">
 						<div class="card">
 							<h3>Chính sách & thủ tục</h3>
 							<p>Tổng mục mặt hàng, nhóm chế độ quản lý và luồng thủ tục nền tảng.</p>
 						</div>
 					</a>
-					<a href="/danh-cho-dn-xnk/">
+					<a href="/danh-cho-dn-xnk/" data-track="home-quick-enterprise">
 						<div class="card">
 							<h3>Dành cho DN XNK</h3>
 							<p>Bộ nội dung áp dụng thực tế cho đội chứng từ và vận hành xuất nhập khẩu.</p>
 						</div>
 					</a>
-					<a href="/co-che-to-chuc-xnk/">
+					<a href="/co-che-to-chuc-xnk/" data-track="home-quick-operating-model">
 						<div class="card">
 							<h3>Cơ chế & tổ chức XNK</h3>
 							<p>Vai trò, phân công và checklist phối hợp nội bộ trước khi khai báo.</p>
 						</div>
 					</a>
-					<a href="/cong-cu-tra-cuu/">
+					<a href="/cong-cu-tra-cuu/" data-track="home-quick-tools">
 						<div class="card">
 							<h3>Công cụ tra cứu</h3>
 							<p>Tìm toàn văn, theo nhãn/HS và các điểm vào nhanh cho tra cứu nghiệp vụ.</p>
@@ -273,7 +292,7 @@ const quickStats = [
 				<div class="cat-grid">
 					{
 						categories.map((key) => (
-							<a href={`/blog/chu-de/${key}/`}>
+							<a href={`/blog/chu-de/${key}/`} data-track="home-category-card">
 								<div class="card">
 									<h3>{CATEGORY_LABELS[key]}</h3>
 									<p>{CATEGORY_HINTS[key]}</p>
@@ -295,7 +314,7 @@ const quickStats = [
 					{
 						posts.map((post) => (
 							<li>
-								<a href={`/blog/${post.id}/`}>
+								<a href={`/blog/${post.id}/`} data-track="home-latest-post">
 									<h3>{post.data.title}</h3>
 									<p class="meta">
 										{CATEGORY_LABELS[post.data.category as BlogCategory]} ·{" "}
@@ -308,8 +327,21 @@ const quickStats = [
 					}
 				</ul>
 				<p class="more">
-					<a class="btn btn-ghost" href="/blog/">Xem toàn bộ tin bài</a>
+					<a class="btn btn-ghost" href="/blog/" data-track="home-view-all-posts">Xem toàn bộ tin bài</a>
 				</p>
+			</section>
+			<section class="newsletter" aria-labelledby="news-h">
+				<h2 id="news-h">Bản tin & cập nhật</h2>
+				<p>
+					Gợi ý cho đội chứng từ và XNK: theo dõi khi có thay đổi biểu thuế, danh mục cấm/hạn chế và
+					quy định kiểm tra chuyên ngành.
+				</p>
+				<div class="newsletter-actions">
+					<a class="btn" href="/rss.xml" data-track="home-news-rss">Đăng ký RSS</a>
+					<a class="btn btn-ghost" href="/cong-cu-tra-cuu/" data-track="home-news-tools">
+						Mở công cụ tra cứu
+					</a>
+				</div>
 			</section>
 		</main>
 		<Footer />

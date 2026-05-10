@@ -1,5 +1,6 @@
 ---
 import BaseHead from "../../components/BaseHead.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import Header from "../../components/Header.astro";
 import Footer from "../../components/Footer.astro";
 import { SITE_TITLE } from "../../consts";
@@ -13,28 +14,29 @@ import { SITE_TITLE } from "../../consts";
 	<body>
 		<Header />
 		<main id="main">
+			<Breadcrumbs items={[{ label: "Trang chủ", href: "/" }, { label: "Công cụ tra cứu" }]} />
 			<h1>Công cụ tra cứu</h1>
 			<p>Chọn điểm vào phù hợp để tìm thông tin nhanh theo từ khóa, mã HS, nhãn và chuyên mục.</p>
 			<div class="grid">
-				<a class="card-link" href="/tim-kiem/">
+				<a class="card-link" href="/tim-kiem/" data-track="tools-search">
 					<article class="card">
 						<h2>Tìm toàn văn (Pagefind)</h2>
 						<p>Tìm theo từ khóa trong toàn bộ nội dung đã xuất bản.</p>
 					</article>
 				</a>
-				<a class="card-link" href="/tra-cuu/">
+				<a class="card-link" href="/tra-cuu/" data-track="tools-index">
 					<article class="card">
 						<h2>Theo nhãn & mã HS</h2>
 						<p>Lọc nhanh nhóm bài theo thẻ nhãn và mã hàng liên quan.</p>
 					</article>
 				</a>
-				<a class="card-link" href="/blog/chu-de/">
+				<a class="card-link" href="/blog/chu-de/" data-track="tools-categories">
 					<article class="card">
 						<h2>Mục lục chuyên mục</h2>
 						<p>Đi vào từng nhóm nội dung nghiệp vụ để đọc tuần tự.</p>
 					</article>
 				</a>
-				<a class="card-link" href="/rss.xml">
+				<a class="card-link" href="/rss.xml" data-track="tools-rss">
 					<article class="card">
 						<h2>RSS cập nhật</h2>
 						<p>Theo dõi nguồn cập nhật để nhúng vào quy trình nội bộ.</p>

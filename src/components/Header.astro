@@ -27,15 +27,19 @@ const routeCoChe = normalizedPath.startsWith("/co-che-to-chuc-xnk");
 		<div class="header-top-inner">
 			<p class="tagline">Cổng thông tin chính sách mặt hàng và thủ tục xuất nhập khẩu</p>
 			<div class="header-top-links">
-				<a href="/rss.xml">Tin RSS</a>
-				<a href="https://customs.gov.vn/" target="_blank" rel="noopener noreferrer">Tổng cục Hải quan</a>
-				<a href="https://vntr.moit.gov.vn/vi" target="_blank" rel="noopener noreferrer">CSDL thương mại (VNTR)</a>
+				<a href="/rss.xml" data-track="header-rss">Tin RSS</a>
+				<a href="https://customs.gov.vn/" target="_blank" rel="noopener noreferrer" data-track="header-customs">
+					Tổng cục Hải quan
+				</a>
+				<a href="https://vntr.moit.gov.vn/vi" target="_blank" rel="noopener noreferrer" data-track="header-vntr">
+					CSDL thương mại (VNTR)
+				</a>
 			</div>
 		</div>
 	</div>
 
 	<div class="header-main">
-		<a class="brand" href="/" aria-label="Về trang chủ cổng thông tin">
+		<a class="brand" href="/" aria-label="Về trang chủ cổng thông tin" data-track="header-brand-home">
 			<span class="brand-mark" aria-hidden="true"></span>
 			<span class="brand-text">
 				<span class="brand-title">{SITE_TITLE}</span>
@@ -60,7 +64,7 @@ const routeCoChe = normalizedPath.startsWith("/co-che-to-chuc-xnk");
 	<nav class="nav-bar" aria-label="Điều hướng chính">
 		<ul class="nav-list">
 			<li>
-				<HeaderLink href="/">Trang chủ</HeaderLink>
+				<HeaderLink href="/" data-track="header-nav-home">Trang chủ</HeaderLink>
 			</li>
 			<li class="has-dropdown">
 				<details class:list={["nav-details", { "is-route-active": routeChinhSach }]}>
@@ -70,7 +74,12 @@ const routeCoChe = normalizedPath.startsWith("/co-che-to-chuc-xnk");
 							Tổng hợp nhóm nội dung phục vụ tra cứu theo chế độ quản lý, chuyên mục nghiệp vụ và
 							luồng thực hiện chứng từ.
 						</p>
-						<HeaderLink class="dropdown-lead" href="/chinh-sach-thu-tuc/" matchPrefix="/chinh-sach-thu-tuc">
+						<HeaderLink
+							class="dropdown-lead"
+							href="/chinh-sach-thu-tuc/"
+							matchPrefix="/chinh-sach-thu-tuc"
+							data-track="header-policy-landing"
+						>
 							Vào trang tổng mục chính sách & thủ tục
 						</HeaderLink>
 						<p class="dropdown-label dropdown-span">Chuyên mục hiện có</p>
@@ -81,6 +90,7 @@ const routeCoChe = normalizedPath.startsWith("/co-che-to-chuc-xnk");
 										class="dropdown-grid-item"
 										href={`/blog/chu-de/${key}/`}
 										matchPrefix={`/blog/chu-de/${key}`}
+										data-track="header-policy-category"
 									>
 										{CATEGORY_LABELS[key]}
 									</HeaderLink>
@@ -99,11 +109,16 @@ const routeCoChe = normalizedPath.startsWith("/co-che-to-chuc-xnk");
 							đội chứng từ.
 						</p>
 						<div class="dropdown-tools-row">
-							<HeaderLink class="dropdown-tool" href="/danh-cho-dn-xnk/" matchPrefix="/danh-cho-dn-xnk">
+							<HeaderLink
+								class="dropdown-tool"
+								href="/danh-cho-dn-xnk/"
+								matchPrefix="/danh-cho-dn-xnk"
+								data-track="header-enterprise-landing"
+							>
 								<span class="dropdown-tool-title">Tổng quan cho DN XNK</span>
 								<span class="dropdown-tool-desc">Điểm vào chính cho vận hành bộ phận chứng từ</span>
 							</HeaderLink>
-							<HeaderLink class="dropdown-tool" href="/blog/" matchPrefix="/blog">
+							<HeaderLink class="dropdown-tool" href="/blog/" matchPrefix="/blog" data-track="header-enterprise-posts">
 								<span class="dropdown-tool-title">Toàn bộ bài hướng dẫn</span>
 								<span class="dropdown-tool-desc">Lọc theo ngày cập nhật và chuyên mục nghiệp vụ</span>
 							</HeaderLink>
@@ -120,15 +135,20 @@ const routeCoChe = normalizedPath.startsWith("/co-che-to-chuc-xnk");
 							khi mở tờ khai.
 						</p>
 						<div class="dropdown-tools-row">
-							<HeaderLink class="dropdown-tool" href="/cong-cu-tra-cuu/" matchPrefix="/cong-cu-tra-cuu">
+							<HeaderLink
+								class="dropdown-tool"
+								href="/cong-cu-tra-cuu/"
+								matchPrefix="/cong-cu-tra-cuu"
+								data-track="header-tools-landing"
+							>
 								<span class="dropdown-tool-title">Tổng hợp công cụ tra cứu</span>
 								<span class="dropdown-tool-desc">Điểm vào nhanh cho đội XNK và chứng từ</span>
 							</HeaderLink>
-							<HeaderLink class="dropdown-tool" href="/tim-kiem/" matchPrefix="/tim-kiem">
+							<HeaderLink class="dropdown-tool" href="/tim-kiem/" matchPrefix="/tim-kiem" data-track="header-tools-search">
 								<span class="dropdown-tool-title">Tìm toàn văn</span>
 								<span class="dropdown-tool-desc">Nhập từ khóa, số HS, tên chuyên mục hoặc nhãn</span>
 							</HeaderLink>
-							<HeaderLink class="dropdown-tool" href="/tra-cuu/" matchPrefix="/tra-cuu">
+							<HeaderLink class="dropdown-tool" href="/tra-cuu/" matchPrefix="/tra-cuu" data-track="header-tools-index">
 								<span class="dropdown-tool-title">Chỉ mục HS và nhãn</span>
 								<span class="dropdown-tool-desc">Danh mục mã hàng và nhãn đang dùng trên cổng</span>
 							</HeaderLink>
@@ -144,11 +164,16 @@ const routeCoChe = normalizedPath.startsWith("/co-che-to-chuc-xnk");
 							Gói nội dung nền cho quản trị nội bộ: khung tổ chức, phân công và trình tự luồng chứng từ.
 						</p>
 						<div class="dropdown-tools-row">
-							<HeaderLink class="dropdown-tool" href="/co-che-to-chuc-xnk/" matchPrefix="/co-che-to-chuc-xnk">
+							<HeaderLink
+								class="dropdown-tool"
+								href="/co-che-to-chuc-xnk/"
+								matchPrefix="/co-che-to-chuc-xnk"
+								data-track="header-operating-landing"
+							>
 								<span class="dropdown-tool-title">Khung cơ chế tổng quan</span>
 								<span class="dropdown-tool-desc">Mục tiêu vận hành và ranh giới với logistics</span>
 							</HeaderLink>
-							<HeaderLink class="dropdown-tool" href="/about" matchPrefix="/about">
+							<HeaderLink class="dropdown-tool" href="/about" matchPrefix="/about" data-track="header-operating-about">
 								<span class="dropdown-tool-title">Giới thiệu cổng</span>
 								<span class="dropdown-tool-desc">Phạm vi sử dụng và lưu ý pháp lý khi áp dụng nội dung</span>
 							</HeaderLink>

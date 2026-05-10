@@ -1,5 +1,6 @@
 ---
 import BaseHead from "../../components/BaseHead.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import Header from "../../components/Header.astro";
 import Footer from "../../components/Footer.astro";
 import { SITE_TITLE } from "../../consts";
@@ -13,6 +14,7 @@ import { SITE_TITLE } from "../../consts";
 	<body>
 		<Header />
 		<main id="main">
+			<Breadcrumbs items={[{ label: "Trang chủ", href: "/" }, { label: "Cơ chế & tổ chức XNK" }]} />
 			<h1>Cơ chế & tổ chức XNK</h1>
 			<p>
 				Khung tổ chức nội bộ giúp đồng bộ giữa kinh doanh, chứng từ, kế toán thuế và kho trước, trong và sau thông quan.
@@ -24,8 +26,8 @@ import { SITE_TITLE } from "../../consts";
 				<li>Rà soát sau thông quan và cập nhật thay đổi pháp lý định kỳ.</li>
 			</ul>
 			<p class="actions">
-				<a class="btn" href="/blog/">Xem bài hướng dẫn</a>
-				<a class="btn btn-ghost" href="/about">Giới thiệu phạm vi sử dụng</a>
+				<a class="btn" href="/blog/" data-track="operating-model-guide">Xem bài hướng dẫn</a>
+				<a class="btn btn-ghost" href="/about" data-track="operating-model-about">Giới thiệu phạm vi sử dụng</a>
 			</p>
 		</main>
 		<Footer />

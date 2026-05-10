@@ -7,11 +7,12 @@ interface Props {
 	title: string;
 	description: string;
 	image?: string;
+	robots?: string;
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image = '/favicon.svg' } = Astro.props;
+const { title, description, image = '/favicon.svg', robots = "index,follow,max-image-preview:large" } = Astro.props;
 ---
 
 <!-- Global Metadata -->
@@ -31,9 +32,12 @@ const { title, description, image = '/favicon.svg' } = Astro.props;
 <title>{title}</title>
 <meta name="title" content={title} />
 <meta name="description" content={description} />
+<meta name="robots" content={robots} />
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website" />
+<meta property="og:site_name" content="FASTPORT" />
+<meta property="og:locale" content="vi_VN" />
 <meta property="og:url" content={Astro.url} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
@@ -45,3 +49,39 @@ const { title, description, image = '/favicon.svg' } = Astro.props;
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
+
+<script is:inline>
+	(function () {
+		function emitTracking(label, href) {
+			try {
+				if (window.gtag) {
+					window.gtag("event", "select_content", {
+						content_type: "link",
+						item_id: label,
+						link_url: href,
+					});
+				}
+				if (window.plausible) {
+					window.plausible("link_click", { props: { label: label, href: href } });
+				}
+				if (window.dataLayer && Array.isArray(window.dataLayer)) {
+					window.dataLayer.push({
+						event: "link_click",
+						label: label,
+						href: href,
+					});
+				}
+			} catch (_) {}
+		}
+
+		document.addEventListener("click", function (event) {
+			var target = event.target;
+			if (!(target instanceof Element)) return;
+			var link = target.closest("a[data-track]");
+			if (!link) return;
+			var label = link.getAttribute("data-track") || "unknown-link";
+			var href = link.getAttribute("href") || "";
+			emitTracking(label, href);
+		});
+	})();
+</script>

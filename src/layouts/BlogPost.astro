@@ -4,6 +4,7 @@ import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import FormattedDate from "../components/FormattedDate.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
 import {
 	CATEGORY_LABELS,
 	hsSlug,
@@ -127,9 +128,19 @@ const ogImage = heroImage ?? "/favicon.svg";
 					{heroImage && <img width={1020} height={510} src={heroImage} alt="" />}
 				</div>
 				<div class="prose">
+					<Breadcrumbs
+						items={[
+							{ label: "Trang chủ", href: "/" },
+							{ label: "Chính sách & thủ tục", href: "/chinh-sach-thu-tuc/" },
+							{ label: categoryLabel, href: `/blog/chu-de/${category}/` },
+							{ label: title },
+						]}
+					/>
 					<div class="title">
 						<p class="date">
-							<a class="badge" href={`/blog/chu-de/${category}/`}>{categoryLabel}</a>
+							<a class="badge" href={`/blog/chu-de/${category}/`} data-track="post-category">
+								{categoryLabel}
+							</a>
 							<FormattedDate date={pubDate} />
 							{
 								updatedDate && (
@@ -159,7 +170,7 @@ const ogImage = heroImage ?? "/favicon.svg";
 								<p class="meta-row">
 									<strong>Mã HS gợi ý:</strong>{" "}
 									{hsCodes.map((code) => (
-										<a class="badge secondary" href={`/blog/hs/${hsSlug(code)}/`}>
+										<a class="badge secondary" href={`/blog/hs/${hsSlug(code)}/`} data-track="post-hscode">
 											{code}
 										</a>
 									))}
@@ -171,7 +182,7 @@ const ogImage = heroImage ?? "/favicon.svg";
 								<p class="meta-row">
 									<strong>Nhãn:</strong>{" "}
 									{tags.map((tag) => (
-										<a class="badge secondary" href={`/blog/nhan/${slugifyTag(tag)}/`}>
+										<a class="badge secondary" href={`/blog/nhan/${slugifyTag(tag)}/`} data-track="post-tag">
 											{tag}
 										</a>
 									))}

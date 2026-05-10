@@ -10,6 +10,7 @@ import {
 	type BlogCategory,
 } from "../../../utils/blog";
 import FormattedDate from "../../../components/FormattedDate.astro";
+import Breadcrumbs from "../../../components/Breadcrumbs.astro";
 
 export async function getStaticPaths() {
 	const keys = Object.keys(CATEGORY_LABELS) as BlogCategory[];
@@ -38,6 +39,14 @@ const description = `Danh sách bài viết: ${label}. ${SITE_DESCRIPTION}`;
 	<body>
 		<Header />
 		<main id="main">
+			<Breadcrumbs
+				items={[
+					{ label: "Trang chủ", href: "/" },
+					{ label: "Chính sách & thủ tục", href: "/chinh-sach-thu-tuc/" },
+					{ label: "Chuyên mục", href: "/blog/chu-de/" },
+					{ label },
+				]}
+			/>
 			<h1>{label}</h1>
 			<p>
 				<a href="/blog/chu-de/">← Chuyên mục</a>
@@ -48,7 +57,7 @@ const description = `Danh sách bài viết: ${label}. ${SITE_DESCRIPTION}`;
 				{
 					posts.map((post) => (
 						<li>
-							<a href={`/blog/${post.id}/`}>
+							<a href={`/blog/${post.id}/`} data-track="category-post-link">
 								<strong>{post.data.title}</strong>
 							</a>
 							{" — "}

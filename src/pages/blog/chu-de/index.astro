@@ -10,6 +10,7 @@ import {
 	isBlogCategory,
 	type BlogCategory,
 } from "../../../utils/blog";
+import Breadcrumbs from "../../../components/Breadcrumbs.astro";
 
 const posts = await getPublishedPosts();
 const counts = {} as Record<BlogCategory, number>;
@@ -72,6 +73,7 @@ const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 	<body>
 		<Header />
 		<main id="main">
+			<Breadcrumbs items={[{ label: "Trang chủ", href: "/" }, { label: "Chính sách & thủ tục", href: "/chinh-sach-thu-tuc/" }, { label: "Chuyên mục" }]} />
 			<h1>Phân loại theo chuyên mục</h1>
 			<p>
 				Chọn một chuyên mục để xem danh sách tin bài thuộc nhóm đó. Mỗi thẻ hiển thị
@@ -80,7 +82,7 @@ const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 			<div class="grid">
 				{
 					categories.map((key) => (
-						<a href={`/blog/chu-de/${key}/`}>
+						<a href={`/blog/chu-de/${key}/`} data-track="category-overview-card">
 							<div class="card">
 								<h2>{CATEGORY_LABELS[key]}</h2>
 								<p>{CATEGORY_HINTS[key]}</p>

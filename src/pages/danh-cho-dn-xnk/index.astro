@@ -1,5 +1,6 @@
 ---
 import BaseHead from "../../components/BaseHead.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import Header from "../../components/Header.astro";
 import Footer from "../../components/Footer.astro";
 import { SITE_TITLE } from "../../consts";
@@ -13,30 +14,31 @@ import { SITE_TITLE } from "../../consts";
 	<body>
 		<Header />
 		<main id="main">
+			<Breadcrumbs items={[{ label: "Trang chủ", href: "/" }, { label: "Dành cho DN XNK" }]} />
 			<h1>Dành cho doanh nghiệp XNK</h1>
 			<p>
 				Trang này gom các đường dẫn vận hành nhanh cho đội chứng từ: đọc tổng mục, tra cứu nhanh, và theo dõi bài mới.
 			</p>
 			<div class="grid">
-				<a class="card-link" href="/blog/">
+				<a class="card-link" href="/blog/" data-track="enterprise-post-list">
 					<article class="card">
 						<h2>Tổng mục bài viết</h2>
 						<p>Toàn bộ bài hướng dẫn để đội XNK lọc theo thời gian cập nhật.</p>
 					</article>
 				</a>
-				<a class="card-link" href="/chinh-sach-thu-tuc/">
+				<a class="card-link" href="/chinh-sach-thu-tuc/" data-track="enterprise-policy">
 					<article class="card">
 						<h2>Danh mục mặt hàng</h2>
 						<p>Đi theo chuyên mục và nhóm chính sách để rà điều kiện quản lý.</p>
 					</article>
 				</a>
-				<a class="card-link" href="/tim-kiem/">
+				<a class="card-link" href="/tim-kiem/" data-track="enterprise-search">
 					<article class="card">
 						<h2>Tìm toàn văn</h2>
 						<p>Tra theo từ khóa, mã HS hoặc nhãn khi cần xử lý gấp hồ sơ.</p>
 					</article>
 				</a>
-				<a class="card-link" href="/cong-cu-tra-cuu/">
+				<a class="card-link" href="/cong-cu-tra-cuu/" data-track="enterprise-tools">
 					<article class="card">
 						<h2>Công cụ tra cứu</h2>
 						<p>Điểm vào theo nhãn, HS và liên kết RSS phục vụ cập nhật nội bộ.</p>
