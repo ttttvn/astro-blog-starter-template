@@ -1,0 +1,106 @@
+# Decap CMS — https://decapcms.org/docs/
+#
+# BƯỚC BẮT BUỘC (production): triển khai OAuth proxy (Cloudflare Worker) và sửa base_url bên dưới.
+# Hướng dẫn: public/admin/THIET-LAP-OAUTH.txt
+#
+# Thử nhanh trên máy (không cần OAuth): bật dòng local_backend, chạy: npx decap-server@latest
+# rồi mở http://localhost:4321/admin/ (cùng lúc chạy npm run dev nếu cần xem site).
+
+# local_backend: true
+
+site_url: https://astro-blog-starter-template.phucnhan218.workers.dev
+display_url: https://astro-blog-starter-template.phucnhan218.workers.dev
+
+backend:
+  name: github
+  repo: ttttvn/astro-blog-starter-template
+  branch: main
+  # PROXY URL (Worker decap-proxy), không dùng hostname site tin:
+  # https://github.com/sterlingwes/decap-proxy
+  base_url: https://REPLACE-WITH-OAUTH-PROXY.workers.dev
+  auth_endpoint: /auth
+
+media_folder: public/uploads
+public_folder: /uploads
+
+locale: vi
+
+collections:
+  - name: blog
+    label: Tin bài
+    label_singular: Bài viết
+    folder: src/content/blog
+    create: true
+    slug: "{{fields.slug}}"
+    extension: md
+    format: frontmatter
+    editor:
+      preview: false
+    fields:
+      - label: "Slug file (URL, chỉ a-z 0-9 và gạch ngang)"
+        name: slug
+        widget: string
+        pattern: ["^[a-z0-9]+(?:-[a-z0-9]+)*$", "Chỉ chữ thường Latin, số và dấu gạch ngang"]
+      - { label: Tiêu đề, name: title, widget: string }
+      - { label: Tóm tắt, name: description, widget: text }
+      - label: Ngày đăng
+        name: pubDate
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        picker_utc: false
+      - label: Ngày cập nhật (tuỳ chọn)
+        name: updatedDate
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        required: false
+        picker_utc: false
+      - label: Ảnh đại diện (tuỳ chọn)
+        name: heroImage
+        widget: image
+        required: false
+      - { label: "Bản nháp (không hiển thị trên site)", name: draft, widget: boolean, default: false }
+      - label: Chuyên mục
+        name: category
+        widget: select
+        options:
+          - { label: "Chính sách mặt hàng", value: "chinh-sach-mat-hang" }
+          - { label: "Thủ tục XNK", value: "thu-tuc-xnk" }
+          - { label: "Cập nhật văn bản", value: "cap-nhat-van-ban" }
+          - { label: "Hướng dẫn", value: "huong-dan" }
+      - label: Nhãn (tags)
+        name: tags
+        widget: list
+        allow_add: true
+        default: []
+        required: false
+        summary: "{{fields}}"
+        field:
+          label: Nhãn
+          widget: string
+      - label: Mã HS (tuỳ chọn)
+        name: hsCodes
+        widget: list
+        allow_add: true
+        default: []
+        required: false
+        summary: "{{fields}}"
+        field:
+          label: "Mã HS"
+          widget: string
+      - label: Ngày hiệu lực / tham chiếu (tuỳ chọn)
+        name: effectiveDate
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        required: false
+        picker_utc: false
+      - label: Căn cứ pháp lý (tuỳ chọn)
+        name: legalBasis
+        widget: list
+        required: false
+        fields:
+          - { label: "Nhãn hiển thị", name: label, widget: string }
+          - { label: "URL đầy đủ (https://...)", name: href, widget: string }
+      - { label: Nội dung, name: body, widget: markdown }

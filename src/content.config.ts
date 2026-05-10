@@ -17,6 +17,8 @@ const blogCategory = z.enum([
 const blog = defineCollection({
 	loader: glob({ base: "./src/content/blog", pattern: "**/*.{md,mdx}" }),
 	schema: z.object({
+		/** Dùng bởi Decap CMS cho slug file; Astro không bắt buộc trường này khi render. */
+		slug: z.string().optional(),
 		title: z.string(),
 		description: z.string(),
 		pubDate: z.coerce.date(),
