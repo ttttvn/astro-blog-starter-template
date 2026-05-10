@@ -5,6 +5,13 @@ import { CATEGORY_LABELS, type BlogCategory } from "../utils/blog";
 
 const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 const q = Astro.url.searchParams.get("q") ?? "";
+
+const rawPath = Astro.url.pathname.replace(import.meta.env.BASE_URL, "");
+const normalizedPath =
+	rawPath.length > 1 && rawPath.endsWith("/") ? rawPath.slice(0, -1) : rawPath || "/";
+
+const routeChuyenMuc = normalizedPath.startsWith("/blog/chu-de");
+const routeTraCuu = normalizedPath.startsWith("/tim-kiem") || normalizedPath.startsWith("/tra-cuu");
 ---
 
 <header class="site-header">
@@ -49,38 +56,55 @@ const q = Astro.url.searchParams.get("q") ?? "";
 			<li>
 				<HeaderLink href="/">Trang chủ</HeaderLink>
 			</li>
+			<li>
+				<HeaderLink href="/blog/" matchPrefix="/blog" prefixExclude="chu-de">Danh mục tin bài</HeaderLink>
+			</li>
 			<li class="has-dropdown">
-				<details class="nav-details">
-					<summary>Tin bài &amp; hướng dẫn</summary>
-					<div class="dropdown-panel">
-						<HeaderLink href="/blog/" matchPrefix="/blog" prefixExclude="chu-de"
-							>Toàn bộ tin bài</HeaderLink
-						>
-						<HeaderLink href="/blog/chu-de/" matchPrefix="/blog/chu-de"
-							>Phân loại theo chuyên mục</HeaderLink
-						>
-						<hr class="dropdown-hr" />
-						<p class="dropdown-label">Chuyên mục</p>
-						{
-							categories.map((key) => (
-								<HeaderLink href={`/blog/chu-de/${key}/`} matchPrefix={`/blog/chu-de/${key}`}>
-									{CATEGORY_LABELS[key]}
-								</HeaderLink>
-							))
-						}
+				<details class:list={["nav-details", { "is-route-active": routeChuyenMuc }]}>
+					<summary title="Phân loại tin theo chuyên mục nghiệp vụ">Chuyên mục</summary>
+					<div class="dropdown-panel dropdown-panel--mega">
+						<p class="dropdown-intro">
+							Mỗi chuyên mục gom các tin cùng lĩnh vực (chính sách mặt hàng, thủ tục XNK, cập nhật
+							văn bản, hướng dẫn).
+						</p>
+						<HeaderLink class="dropdown-lead" href="/blog/chu-de/" matchPrefix="/blog/chu-de">
+							Tổng quan bốn chuyên mục
+						</HeaderLink>
+						<p class="dropdown-label dropdown-span">Vào từng chuyên mục</p>
+						<div class="dropdown-grid">
+							{
+								categories.map((key) => (
+									<HeaderLink
+										class="dropdown-grid-item"
+										href={`/blog/chu-de/${key}/`}
+										matchPrefix={`/blog/chu-de/${key}`}
+									>
+										{CATEGORY_LABELS[key]}
+									</HeaderLink>
+								))
+							}
+						</div>
 					</div>
 				</details>
 			</li>
 			<li class="has-dropdown">
-				<details class="nav-details">
-					<summary>Hỗ trợ tra cứu</summary>
-					<div class="dropdown-panel">
-						<HeaderLink href="/tim-kiem/" matchPrefix="/tim-kiem">Tìm trong toàn cổng</HeaderLink>
-						<HeaderLink href="/tra-cuu/" matchPrefix="/tra-cuu">Chỉ mục mã HS và nhãn</HeaderLink>
-						<hr class="dropdown-hr" />
-						<p class="dropdown-label">Truy cập trực tiếp</p>
-						<a class="dropdown-link" href="/tra-cuu/#ma-hs">Danh mục mã HS</a>
-						<a class="dropdown-link" href="/tra-cuu/#nhan">Danh mục nhãn nội dung</a>
+				<details class:list={["nav-details", { "is-route-active": routeTraCuu }]}>
+					<summary title="Công cụ tìm kiếm và chỉ mục">Tra cứu</summary>
+					<div class="dropdown-panel dropdown-panel--tools">
+						<p class="dropdown-intro">
+							Hai công cụ chính: tìm theo từ khóa trên toàn bộ tin đã đăng, hoặc vào trang chỉ mục
+							theo mã HS và nhãn nội dung.
+						</p>
+						<div class="dropdown-tools-row">
+							<HeaderLink class="dropdown-tool" href="/tim-kiem/" matchPrefix="/tim-kiem">
+								<span class="dropdown-tool-title">Tìm toàn văn</span>
+								<span class="dropdown-tool-desc">Nhập từ khóa, số HS, tên chuyên mục hoặc nhãn</span>
+							</HeaderLink>
+							<HeaderLink class="dropdown-tool" href="/tra-cuu/" matchPrefix="/tra-cuu">
+								<span class="dropdown-tool-title">Chỉ mục HS và nhãn</span>
+								<span class="dropdown-tool-desc">Danh mục mã hàng và nhãn đang dùng trên cổng</span>
+							</HeaderLink>
+						</div>
 					</div>
 				</details>
 			</li>
@@ -90,6 +114,22 @@ const q = Astro.url.searchParams.get("q") ?? "";
 		</ul>
 	</nav>
 </header>
+
+<script is:inline>
+	(function () {
+		var root = document.querySelector(".site-header");
+		if (!root) return;
+		var details = root.querySelectorAll(".nav-details");
+		details.forEach(function (d) {
+			d.addEventListener("toggle", function () {
+				if (!d.open) return;
+				details.forEach(function (o) {
+					if (o !== d) o.open = false;
+				});
+			});
+		});
+	})();
+</script>
 
 <style>
 	.site-header {
@@ -283,10 +323,15 @@ const q = Astro.url.searchParams.get("q") ?? "";
 		position: relative;
 		height: 100%;
 	}
+	.nav-details.is-route-active > summary {
+		color: var(--brand);
+		border-bottom-color: var(--accent);
+		background: #fff;
+	}
 	.nav-details > summary {
 		list-style: none;
 		cursor: pointer;
-		padding: 0.65rem 1.6rem 0.65rem 0.9rem;
+		padding: 0.65rem 1.55rem 0.65rem 0.9rem;
 		font-weight: 600;
 		font-size: 0.875rem;
 		letter-spacing: 0.02em;
@@ -302,7 +347,7 @@ const q = Astro.url.searchParams.get("q") ?? "";
 	.nav-details > summary::after {
 		content: "";
 		position: absolute;
-		right: 0.65rem;
+		right: 0.6rem;
 		top: 50%;
 		width: 0.35rem;
 		height: 0.35rem;
@@ -328,55 +373,115 @@ const q = Astro.url.searchParams.get("q") ?? "";
 	.dropdown-panel {
 		position: absolute;
 		left: 0;
-		top: calc(100% + 0);
-		min-width: min(20rem, calc(100vw - 2rem));
-		max-width: min(26rem, calc(100vw - 1rem));
-		padding: 0.6rem 0.5rem;
+		top: 100%;
+		padding: 0.65rem 0.55rem 0.7rem;
 		background: var(--surface);
 		border: 1px solid var(--border-strong);
 		border-radius: 0 0 var(--radius) var(--radius);
 		box-shadow: var(--shadow-md);
-		display: flex;
-		flex-direction: column;
-		gap: 0.05rem;
 		z-index: 60;
 	}
-	.dropdown-panel :global(a) {
-		padding: 0.5rem 0.65rem;
+	.dropdown-panel--mega {
+		min-width: min(22rem, calc(100vw - 1.5rem));
+		max-width: min(40rem, calc(100vw - 1rem));
+	}
+	.dropdown-panel--tools {
+		min-width: min(22rem, calc(100vw - 1.5rem));
+		max-width: min(34rem, calc(100vw - 1rem));
+	}
+	.dropdown-intro {
+		margin: 0 0.5rem 0.55rem;
+		padding-bottom: 0.55rem;
+		border-bottom: 1px solid var(--border);
+		font-size: 0.8125rem;
+		line-height: 1.45;
+		color: rgb(var(--gray));
+	}
+	.dropdown-span {
+		margin-left: 0.5rem;
+		margin-right: 0.5rem;
+	}
+	.dropdown-panel :global(a.dropdown-lead) {
+		display: block;
+		margin: 0 0.35rem 0.5rem;
+		padding: 0.55rem 0.65rem;
 		border-radius: var(--radius-sm);
+		background: var(--accent-soft);
 		color: var(--brand-ink);
-		font-weight: 600;
+		font-weight: 700;
 		font-size: 0.875rem;
 		text-decoration: none;
 	}
-	.dropdown-panel :global(a:hover) {
-		background: var(--accent-soft);
-		color: var(--accent);
-	}
-	.dropdown-link {
-		padding: 0.5rem 0.65rem;
-		border-radius: var(--radius-sm);
-		color: var(--brand-ink);
-		font-weight: 600;
-		font-size: 0.875rem;
-		text-decoration: none;
-	}
-	.dropdown-link:hover {
-		background: var(--accent-soft);
-		color: var(--accent);
-	}
-	.dropdown-hr {
-		margin: 0.4rem 0.35rem;
-		border: none;
-		border-top: 1px solid var(--border);
+	.dropdown-panel :global(a.dropdown-lead:hover) {
+		background: var(--accent-soft-strong);
+		color: var(--accent-hover);
 	}
 	.dropdown-label {
-		margin: 0.45rem 0.65rem 0.2rem;
+		margin: 0.35rem 0.5rem 0.35rem;
 		font-size: 0.6875rem;
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
 		color: rgb(var(--gray));
 		font-weight: 700;
+	}
+	.dropdown-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 0.25rem 0.4rem;
+		padding: 0 0.2rem;
+	}
+	.dropdown-panel :global(a.dropdown-grid-item) {
+		display: block;
+		padding: 0.5rem 0.6rem;
+		border-radius: var(--radius-sm);
+		border: 1px solid var(--border);
+		color: var(--brand-ink);
+		font-weight: 600;
+		font-size: 0.8125rem;
+		text-decoration: none;
+		line-height: 1.3;
+	}
+	.dropdown-panel :global(a.dropdown-grid-item:hover) {
+		border-color: rgba(37, 99, 235, 0.45);
+		background: var(--accent-soft);
+		color: var(--accent);
+	}
+	.dropdown-tools-row {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 0.45rem;
+		padding: 0 0.2rem;
+	}
+	.dropdown-panel :global(a.dropdown-tool) {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+		padding: 0.6rem 0.65rem;
+		border-radius: var(--radius-sm);
+		border: 1px solid var(--border);
+		text-decoration: none;
+		color: inherit;
+		transition:
+			border-color 0.15s,
+			background 0.15s;
+	}
+	.dropdown-panel :global(a.dropdown-tool:hover) {
+		border-color: rgba(37, 99, 235, 0.5);
+		background: var(--accent-soft);
+	}
+	.dropdown-tool-title {
+		font-weight: 700;
+		font-size: 0.875rem;
+		color: var(--brand-ink);
+	}
+	.dropdown-tool-desc {
+		font-size: 0.75rem;
+		line-height: 1.35;
+		color: rgb(var(--gray));
+		font-weight: 500;
+	}
+	.dropdown-panel :global(a.dropdown-tool:hover .dropdown-tool-title) {
+		color: var(--accent);
 	}
 
 	@media (max-width: 720px) {
@@ -384,13 +489,27 @@ const q = Astro.url.searchParams.get("q") ?? "";
 			max-width: 100%;
 			width: 100%;
 		}
+		.nav-list {
+			flex-wrap: nowrap;
+			overflow-x: auto;
+			overflow-y: hidden;
+			-webkit-overflow-scrolling: touch;
+			scrollbar-width: thin;
+		}
+		.nav-list > li {
+			flex: 0 0 auto;
+		}
 		.dropdown-panel {
 			position: static;
 			border-radius: var(--radius);
-			margin: 0.25rem 0 0.35rem;
+			margin: 0.2rem 0 0.35rem;
 			box-shadow: none;
 			border: 1px solid var(--border);
 			max-width: 100%;
+		}
+		.dropdown-grid,
+		.dropdown-tools-row {
+			grid-template-columns: 1fr;
 		}
 	}
 </style>
