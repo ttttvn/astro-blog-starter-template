@@ -1,0 +1,69 @@
+---
+import BaseHead from "../../components/BaseHead.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { SITE_TITLE } from "../../consts";
+---
+
+<!doctype html>
+<html lang="vi">
+	<head>
+		<BaseHead title={`Công cụ tra cứu | ${SITE_TITLE}`} description="Tập hợp công cụ tra cứu nhanh cho đội XNK và chứng từ." />
+	</head>
+	<body>
+		<Header />
+		<main id="main">
+			<h1>Công cụ tra cứu</h1>
+			<p>Chọn điểm vào phù hợp để tìm thông tin nhanh theo từ khóa, mã HS, nhãn và chuyên mục.</p>
+			<div class="grid">
+				<a class="card-link" href="/tim-kiem/">
+					<article class="card">
+						<h2>Tìm toàn văn (Pagefind)</h2>
+						<p>Tìm theo từ khóa trong toàn bộ nội dung đã xuất bản.</p>
+					</article>
+				</a>
+				<a class="card-link" href="/tra-cuu/">
+					<article class="card">
+						<h2>Theo nhãn & mã HS</h2>
+						<p>Lọc nhanh nhóm bài theo thẻ nhãn và mã hàng liên quan.</p>
+					</article>
+				</a>
+				<a class="card-link" href="/blog/chu-de/">
+					<article class="card">
+						<h2>Mục lục chuyên mục</h2>
+						<p>Đi vào từng nhóm nội dung nghiệp vụ để đọc tuần tự.</p>
+					</article>
+				</a>
+				<a class="card-link" href="/rss.xml">
+					<article class="card">
+						<h2>RSS cập nhật</h2>
+						<p>Theo dõi nguồn cập nhật để nhúng vào quy trình nội bộ.</p>
+					</article>
+				</a>
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+		gap: 1rem;
+		margin-top: 1rem;
+	}
+	.card-link {
+		text-decoration: none;
+		color: inherit;
+	}
+	.card h2 {
+		font-size: 1.1rem;
+		margin-bottom: 0.4rem;
+	}
+	.card p {
+		margin: 0;
+		color: rgb(var(--gray));
+		font-size: 0.95rem;
+	}
+</style>

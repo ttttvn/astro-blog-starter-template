@@ -10,8 +10,14 @@ const rawPath = Astro.url.pathname.replace(import.meta.env.BASE_URL, "");
 const normalizedPath =
 	rawPath.length > 1 && rawPath.endsWith("/") ? rawPath.slice(0, -1) : rawPath || "/";
 
-const routeChuyenMuc = normalizedPath.startsWith("/blog/chu-de");
-const routeTraCuu = normalizedPath.startsWith("/tim-kiem") || normalizedPath.startsWith("/tra-cuu");
+const routeChinhSach =
+	normalizedPath.startsWith("/chinh-sach-thu-tuc") || normalizedPath.startsWith("/blog/chu-de");
+const routeDnXnk = normalizedPath.startsWith("/danh-cho-dn-xnk");
+const routeCongCu =
+	normalizedPath.startsWith("/cong-cu-tra-cuu") ||
+	normalizedPath.startsWith("/tim-kiem") ||
+	normalizedPath.startsWith("/tra-cuu");
+const routeCoChe = normalizedPath.startsWith("/co-che-to-chuc-xnk");
 ---
 
 <header class="site-header">
@@ -56,21 +62,18 @@ const routeTraCuu = normalizedPath.startsWith("/tim-kiem") || normalizedPath.sta
 			<li>
 				<HeaderLink href="/">Trang chủ</HeaderLink>
 			</li>
-			<li>
-				<HeaderLink href="/blog/" matchPrefix="/blog" prefixExclude="chu-de">Danh mục tin bài</HeaderLink>
-			</li>
 			<li class="has-dropdown">
-				<details class:list={["nav-details", { "is-route-active": routeChuyenMuc }]}>
-					<summary title="Phân loại tin theo chuyên mục nghiệp vụ">Chuyên mục</summary>
+				<details class:list={["nav-details", { "is-route-active": routeChinhSach }]}>
+					<summary title="Chính sách, thủ tục và nhóm mặt hàng">Chính sách & thủ tục</summary>
 					<div class="dropdown-panel dropdown-panel--mega">
 						<p class="dropdown-intro">
-							Mỗi chuyên mục gom các tin cùng lĩnh vực (chính sách mặt hàng, thủ tục XNK, cập nhật
-							văn bản, hướng dẫn).
+							Tổng hợp nhóm nội dung phục vụ tra cứu theo chế độ quản lý, chuyên mục nghiệp vụ và
+							luồng thực hiện chứng từ.
 						</p>
-						<HeaderLink class="dropdown-lead" href="/blog/chu-de/" matchPrefix="/blog/chu-de">
-							Tổng quan bốn chuyên mục
+						<HeaderLink class="dropdown-lead" href="/chinh-sach-thu-tuc/" matchPrefix="/chinh-sach-thu-tuc">
+							Vào trang tổng mục chính sách & thủ tục
 						</HeaderLink>
-						<p class="dropdown-label dropdown-span">Vào từng chuyên mục</p>
+						<p class="dropdown-label dropdown-span">Chuyên mục hiện có</p>
 						<div class="dropdown-grid">
 							{
 								categories.map((key) => (
@@ -88,14 +91,39 @@ const routeTraCuu = normalizedPath.startsWith("/tim-kiem") || normalizedPath.sta
 				</details>
 			</li>
 			<li class="has-dropdown">
-				<details class:list={["nav-details", { "is-route-active": routeTraCuu }]}>
-					<summary title="Công cụ tìm kiếm và chỉ mục">Tra cứu</summary>
+				<details class:list={["nav-details", { "is-route-active": routeDnXnk }]}>
+					<summary title="Nội dung dành cho doanh nghiệp XNK">Dành cho DN XNK</summary>
 					<div class="dropdown-panel dropdown-panel--tools">
 						<p class="dropdown-intro">
-							Hai công cụ chính: tìm theo từ khóa trên toàn bộ tin đã đăng, hoặc vào trang chỉ mục
-							theo mã HS và nhãn nội dung.
+							Đi từ tổng quan đến checklist: mô hình phối hợp nội bộ, phân vai và danh mục bài phục vụ
+							đội chứng từ.
 						</p>
 						<div class="dropdown-tools-row">
+							<HeaderLink class="dropdown-tool" href="/danh-cho-dn-xnk/" matchPrefix="/danh-cho-dn-xnk">
+								<span class="dropdown-tool-title">Tổng quan cho DN XNK</span>
+								<span class="dropdown-tool-desc">Điểm vào chính cho vận hành bộ phận chứng từ</span>
+							</HeaderLink>
+							<HeaderLink class="dropdown-tool" href="/blog/" matchPrefix="/blog">
+								<span class="dropdown-tool-title">Toàn bộ bài hướng dẫn</span>
+								<span class="dropdown-tool-desc">Lọc theo ngày cập nhật và chuyên mục nghiệp vụ</span>
+							</HeaderLink>
+						</div>
+					</div>
+				</details>
+			</li>
+			<li class="has-dropdown">
+				<details class:list={["nav-details", { "is-route-active": routeCongCu }]}>
+					<summary title="Công cụ tìm kiếm và chỉ mục">Công cụ tra cứu</summary>
+					<div class="dropdown-panel dropdown-panel--tools">
+						<p class="dropdown-intro">
+							Tìm theo từ khóa toàn văn hoặc truy cập chỉ mục theo mã HS và nhãn; phù hợp rà nhanh trước
+							khi mở tờ khai.
+						</p>
+						<div class="dropdown-tools-row">
+							<HeaderLink class="dropdown-tool" href="/cong-cu-tra-cuu/" matchPrefix="/cong-cu-tra-cuu">
+								<span class="dropdown-tool-title">Tổng hợp công cụ tra cứu</span>
+								<span class="dropdown-tool-desc">Điểm vào nhanh cho đội XNK và chứng từ</span>
+							</HeaderLink>
 							<HeaderLink class="dropdown-tool" href="/tim-kiem/" matchPrefix="/tim-kiem">
 								<span class="dropdown-tool-title">Tìm toàn văn</span>
 								<span class="dropdown-tool-desc">Nhập từ khóa, số HS, tên chuyên mục hoặc nhãn</span>
@@ -108,8 +136,25 @@ const routeTraCuu = normalizedPath.startsWith("/tim-kiem") || normalizedPath.sta
 					</div>
 				</details>
 			</li>
-			<li>
-				<HeaderLink href="/about">Giới thiệu cổng</HeaderLink>
+			<li class="has-dropdown">
+				<details class:list={["nav-details", { "is-route-active": routeCoChe }]}>
+					<summary title="Khung tổ chức và cơ chế vận hành">Cơ chế & tổ chức XNK</summary>
+					<div class="dropdown-panel dropdown-panel--tools">
+						<p class="dropdown-intro">
+							Gói nội dung nền cho quản trị nội bộ: khung tổ chức, phân công và trình tự luồng chứng từ.
+						</p>
+						<div class="dropdown-tools-row">
+							<HeaderLink class="dropdown-tool" href="/co-che-to-chuc-xnk/" matchPrefix="/co-che-to-chuc-xnk">
+								<span class="dropdown-tool-title">Khung cơ chế tổng quan</span>
+								<span class="dropdown-tool-desc">Mục tiêu vận hành và ranh giới với logistics</span>
+							</HeaderLink>
+							<HeaderLink class="dropdown-tool" href="/about" matchPrefix="/about">
+								<span class="dropdown-tool-title">Giới thiệu cổng</span>
+								<span class="dropdown-tool-desc">Phạm vi sử dụng và lưu ý pháp lý khi áp dụng nội dung</span>
+							</HeaderLink>
+						</div>
+					</div>
+				</details>
 			</li>
 		</ul>
 	</nav>

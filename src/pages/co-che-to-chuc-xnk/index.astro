@@ -1,0 +1,48 @@
+---
+import BaseHead from "../../components/BaseHead.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { SITE_TITLE } from "../../consts";
+---
+
+<!doctype html>
+<html lang="vi">
+	<head>
+		<BaseHead title={`Cơ chế & tổ chức XNK | ${SITE_TITLE}`} description="Khung cơ chế nội bộ và luồng phối hợp cho đội XNK." />
+	</head>
+	<body>
+		<Header />
+		<main id="main">
+			<h1>Cơ chế & tổ chức XNK</h1>
+			<p>
+				Khung tổ chức nội bộ giúp đồng bộ giữa kinh doanh, chứng từ, kế toán thuế và kho trước, trong và sau thông quan.
+			</p>
+			<ul class="checklist card">
+				<li>Xác định vai trò và đầu mối chịu trách nhiệm theo từng bước hồ sơ.</li>
+				<li>Đối chiếu mã HS, chính sách và điều kiện chuyên ngành trước mở tờ khai.</li>
+				<li>Chuẩn hóa checklist chứng từ để giảm sai lệch giữa các bộ phận.</li>
+				<li>Rà soát sau thông quan và cập nhật thay đổi pháp lý định kỳ.</li>
+			</ul>
+			<p class="actions">
+				<a class="btn" href="/blog/">Xem bài hướng dẫn</a>
+				<a class="btn btn-ghost" href="/about">Giới thiệu phạm vi sử dụng</a>
+			</p>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.checklist {
+		margin: 1rem 0;
+		padding-left: 1.6rem;
+	}
+	.checklist li {
+		margin-bottom: 0.45rem;
+	}
+	.actions {
+		display: flex;
+		gap: 0.7rem;
+		flex-wrap: wrap;
+	}
+</style>

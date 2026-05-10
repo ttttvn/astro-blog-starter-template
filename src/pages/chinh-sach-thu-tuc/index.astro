@@ -1,0 +1,67 @@
+---
+import BaseHead from "../../components/BaseHead.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { SITE_TITLE } from "../../consts";
+import { CATEGORY_LABELS, CATEGORY_HINTS, type BlogCategory } from "../../utils/blog";
+
+const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
+---
+
+<!doctype html>
+<html lang="vi">
+	<head>
+		<BaseHead title={`Chính sách & thủ tục | ${SITE_TITLE}`} description="Tổng mục chính sách và thủ tục cho đội XNK." />
+	</head>
+	<body>
+		<Header />
+		<main id="main">
+			<h1>Chính sách & thủ tục</h1>
+			<p>
+				Tổng mục dành cho phân loại theo chế độ quản lý và chuyên mục nghiệp vụ. Mỗi nhóm dưới đây liên kết tới
+				danh sách bài hiện có.
+			</p>
+			<div class="grid">
+				{
+					categories.map((key) => (
+						<a class="card-link" href={`/blog/chu-de/${key}/`}>
+							<article class="card">
+								<h2>{CATEGORY_LABELS[key]}</h2>
+								<p>{CATEGORY_HINTS[key]}</p>
+							</article>
+						</a>
+					))
+				}
+			</div>
+			<p>
+				<a class="btn btn-ghost" href="/blog/">Xem toàn bộ bài viết</a>
+			</p>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+		gap: 1rem;
+		margin-top: 1rem;
+	}
+	.card-link {
+		text-decoration: none;
+		color: inherit;
+	}
+	.card {
+		height: 100%;
+	}
+	.card h2 {
+		font-size: 1.1rem;
+		margin-bottom: 0.4rem;
+	}
+	.card p {
+		margin: 0;
+		color: rgb(var(--gray));
+		font-size: 0.95rem;
+	}
+</style>

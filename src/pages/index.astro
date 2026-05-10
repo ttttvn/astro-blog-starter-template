@@ -16,6 +16,10 @@ const posts = (await getPublishedPosts())
 	.slice(0, 5);
 
 const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
+const quickStats = [
+	{ label: "Bản ghi tra cứu", value: `${posts.length}+` },
+	{ label: "Nhóm chuyên mục", value: `${categories.length}` },
+];
 ---
 
 <!doctype html>
@@ -32,6 +36,15 @@ const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 				box-shadow: var(--shadow-md);
 				border: 1px solid rgba(255, 255, 255, 0.12);
 			}
+			.hero-eyebrow {
+				display: inline-block;
+				margin-bottom: 0.55rem;
+				font-size: 0.8rem;
+				letter-spacing: 0.07em;
+				text-transform: uppercase;
+				font-weight: 700;
+				opacity: 0.9;
+			}
 			.hero h1 {
 				color: #fff;
 				margin: 0 0 0.75rem;
@@ -41,13 +54,14 @@ const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 			}
 			.hero p {
 				margin: 0 0 1.25rem;
-				opacity: 0.95;
-				max-width: 40ch;
+				opacity: 0.96;
+				max-width: 48ch;
 			}
 			.hero-actions {
 				display: flex;
 				flex-wrap: wrap;
 				gap: 0.65rem;
+				margin-bottom: 1.1rem;
 			}
 			.hero .btn {
 				background: #fff;
@@ -65,12 +79,65 @@ const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 				background: rgba(255, 255, 255, 0.12);
 				color: #fff;
 			}
+			.quick-stats {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.7rem;
+			}
+			.stat-card {
+				background: rgba(15, 23, 42, 0.2);
+				border: 1px solid rgba(255, 255, 255, 0.24);
+				border-radius: var(--radius-sm);
+				padding: 0.55rem 0.8rem;
+				min-width: 10rem;
+			}
+			.stat-value {
+				display: block;
+				font-weight: 700;
+				font-size: 1.1rem;
+				color: #fff;
+				line-height: 1.2;
+			}
+			.stat-label {
+				font-size: 0.78rem;
+				color: #dbeafe;
+			}
 			.section-title {
 				margin-bottom: 0.75rem;
 			}
 			.section-lead {
 				color: rgb(var(--gray));
 				margin: 0 0 1.25rem;
+			}
+			.menu-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+				gap: 0.9rem;
+				margin: 0 0 2rem;
+			}
+			.menu-grid a {
+				text-decoration: none;
+				color: inherit;
+			}
+			.menu-grid .card {
+				height: 100%;
+				transition:
+					border-color 0.15s,
+					box-shadow 0.15s;
+			}
+			.menu-grid .card:hover {
+				border-color: rgba(37, 99, 235, 0.45);
+				box-shadow: var(--shadow-md);
+			}
+			.menu-grid h3 {
+				margin: 0 0 0.4rem;
+				font-size: 1.02rem;
+				color: var(--brand);
+			}
+			.menu-grid p {
+				margin: 0;
+				font-size: 0.9rem;
+				color: rgb(var(--gray-dark));
 			}
 			.cat-grid {
 				display: grid;
@@ -146,21 +213,63 @@ const categories = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 		<Header />
 		<main id="main">
 			<section class="hero">
-				<h1>Chính sách mặt hàng và thủ tục xuất nhập khẩu</h1>
+				<span class="hero-eyebrow">FASTPORT — Cổng tra cứu XNK</span>
+				<h1>Cổng thông tin chính sách mặt hàng & thủ tục XNK</h1>
 				<p>{SITE_DESCRIPTION}</p>
 				<div class="hero-actions">
-					<a class="btn" href="/tim-kiem/">Tìm toàn văn</a>
-					<a class="btn btn-ghost" href="/tra-cuu/">Chỉ mục HS và nhãn</a>
-					<a class="btn btn-ghost" href="/blog/">Danh sách tin bài</a>
+					<a class="btn" href="/danh-cho-dn-xnk/">Bắt đầu cho DN XNK</a>
+					<a class="btn btn-ghost" href="/chinh-sach-thu-tuc/">Danh mục mặt hàng</a>
+					<a class="btn btn-ghost" href="/tim-kiem/">Tìm toàn văn</a>
+					<a class="btn btn-ghost" href="/about">Liên hệ</a>
+				</div>
+				<div class="quick-stats">
+					{
+						quickStats.map((stat) => (
+							<div class="stat-card">
+								<span class="stat-value">{stat.value}</span>
+								<span class="stat-label">{stat.label}</span>
+							</div>
+						))
+					}
+				</div>
+			</section>
+
+			<section aria-labelledby="menu-h">
+				<h2 id="menu-h" class="section-title">Điều hướng nhanh</h2>
+				<p class="section-lead">
+					Bốn cụm chính theo mô hình FASTPORT: chính sách, hỗ trợ doanh nghiệp, cơ chế nội bộ và tra cứu.
+				</p>
+				<div class="menu-grid">
+					<a href="/chinh-sach-thu-tuc/">
+						<div class="card">
+							<h3>Chính sách & thủ tục</h3>
+							<p>Tổng mục mặt hàng, nhóm chế độ quản lý và luồng thủ tục nền tảng.</p>
+						</div>
+					</a>
+					<a href="/danh-cho-dn-xnk/">
+						<div class="card">
+							<h3>Dành cho DN XNK</h3>
+							<p>Bộ nội dung áp dụng thực tế cho đội chứng từ và vận hành xuất nhập khẩu.</p>
+						</div>
+					</a>
+					<a href="/co-che-to-chuc-xnk/">
+						<div class="card">
+							<h3>Cơ chế & tổ chức XNK</h3>
+							<p>Vai trò, phân công và checklist phối hợp nội bộ trước khi khai báo.</p>
+						</div>
+					</a>
+					<a href="/cong-cu-tra-cuu/">
+						<div class="card">
+							<h3>Công cụ tra cứu</h3>
+							<p>Tìm toàn văn, theo nhãn/HS và các điểm vào nhanh cho tra cứu nghiệp vụ.</p>
+						</div>
+					</a>
 				</div>
 			</section>
 
 			<section aria-labelledby="cat-h">
-				<h2 id="cat-h" class="section-title">Chuyên mục tin bài</h2>
-				<p class="section-lead">
-					Nội dung được phân loại theo bốn chuyên mục; mỗi thẻ dưới đây dẫn tới danh sách tin trong
-					chuyên mục tương ứng.
-				</p>
+				<h2 id="cat-h" class="section-title">Phân loại theo chuyên mục nội dung</h2>
+				<p class="section-lead">Giữ nguyên taxonomy hiện có để không phá dữ liệu đã đăng từ CMS.</p>
 				<div class="cat-grid">
 					{
 						categories.map((key) => (

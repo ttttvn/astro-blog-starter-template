@@ -1,0 +1,71 @@
+---
+import BaseHead from "../../components/BaseHead.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { SITE_TITLE } from "../../consts";
+---
+
+<!doctype html>
+<html lang="vi">
+	<head>
+		<BaseHead title={`Dành cho DN XNK | ${SITE_TITLE}`} description="Điểm vào nội dung cho bộ phận chứng từ và xuất nhập khẩu." />
+	</head>
+	<body>
+		<Header />
+		<main id="main">
+			<h1>Dành cho doanh nghiệp XNK</h1>
+			<p>
+				Trang này gom các đường dẫn vận hành nhanh cho đội chứng từ: đọc tổng mục, tra cứu nhanh, và theo dõi bài mới.
+			</p>
+			<div class="grid">
+				<a class="card-link" href="/blog/">
+					<article class="card">
+						<h2>Tổng mục bài viết</h2>
+						<p>Toàn bộ bài hướng dẫn để đội XNK lọc theo thời gian cập nhật.</p>
+					</article>
+				</a>
+				<a class="card-link" href="/chinh-sach-thu-tuc/">
+					<article class="card">
+						<h2>Danh mục mặt hàng</h2>
+						<p>Đi theo chuyên mục và nhóm chính sách để rà điều kiện quản lý.</p>
+					</article>
+				</a>
+				<a class="card-link" href="/tim-kiem/">
+					<article class="card">
+						<h2>Tìm toàn văn</h2>
+						<p>Tra theo từ khóa, mã HS hoặc nhãn khi cần xử lý gấp hồ sơ.</p>
+					</article>
+				</a>
+				<a class="card-link" href="/cong-cu-tra-cuu/">
+					<article class="card">
+						<h2>Công cụ tra cứu</h2>
+						<p>Điểm vào theo nhãn, HS và liên kết RSS phục vụ cập nhật nội bộ.</p>
+					</article>
+				</a>
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+		gap: 1rem;
+		margin-top: 1rem;
+	}
+	.card-link {
+		text-decoration: none;
+		color: inherit;
+	}
+	.card h2 {
+		font-size: 1.1rem;
+		margin-bottom: 0.4rem;
+	}
+	.card p {
+		margin: 0;
+		color: rgb(var(--gray));
+		font-size: 0.95rem;
+	}
+</style>
