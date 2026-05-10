@@ -2,8 +2,8 @@
 title: "Checklist chứng từ XNK cơ bản cho lô hàng thông thường"
 description: "Danh sách kiểm tra ngắn giúp giảm thiểu bổ sung chứng từ và lệch mô tả giữa các tài liệu."
 pubDate: 2026-05-02
-category: "huong-dan"
-tags: ["chứng-từ", "checklist", "hải-quan"]
+category: "xnk-co-dieu-kien"
+tags: ["chung-tu", "checklist", "hai-quan"]
 hsCodes: []
 effectiveDate: 2026-05-02
 legalBasis:

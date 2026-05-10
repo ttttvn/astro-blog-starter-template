@@ -65,10 +65,11 @@ collections:
         name: category
         widget: select
         options:
-          - { label: "Chính sách mặt hàng", value: "chinh-sach-mat-hang" }
-          - { label: "Thủ tục XNK", value: "thu-tuc-xnk" }
-          - { label: "Cập nhật văn bản", value: "cap-nhat-van-ban" }
-          - { label: "Hướng dẫn", value: "huong-dan" }
+          - { label: "Cấm, hạn chế & cấm tuyệt đối", value: "cam-han-che" }
+          - { label: "XNK có điều kiện", value: "xnk-co-dieu-kien" }
+          - { label: "Kiểm tra chuyên ngành", value: "kiem-tra-chuyen-nganh" }
+          - { label: "Nhóm hàng nhập khẩu", value: "nhom-hang-nhap-khau" }
+          - { label: "Nhóm hàng xuất khẩu", value: "nhom-hang-xuat-khau" }
       - label: Nhãn (tags)
         name: tags
         widget: list

@@ -8,10 +8,11 @@ const legalRef = z.object({
 });
 
 const blogCategory = z.enum([
-	"chinh-sach-mat-hang",
-	"thu-tuc-xnk",
-	"cap-nhat-van-ban",
-	"huong-dan",
+	"cam-han-che",
+	"xnk-co-dieu-kien",
+	"kiem-tra-chuyen-nganh",
+	"nhom-hang-nhap-khau",
+	"nhom-hang-xuat-khau",
 ]);
 
 const blog = defineCollection({

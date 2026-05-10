@@ -2,7 +2,7 @@
 title: "Nhập khẩu thực phẩm: góc nhìn chính sách theo mặt hàng (khung tra cứu)"
 description: "Các lớp điều kiện thường gặp khi phân loại rủi ro pháp lý cho thực phẩm XNK — không thay cho kiểm tra chuyên ngành từng lô."
 pubDate: 2026-05-06
-category: "chinh-sach-mat-hang"
+category: "kiem-tra-chuyen-nganh"
 tags: ["thực-phẩm", "kiểm-tra-chuyên-ngành", "an-toàn-thực-phẩm"]
 hsCodes: ["0402.10.10", "1901.90.99"]
 effectiveDate: 2026-05-01

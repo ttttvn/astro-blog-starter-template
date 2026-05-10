@@ -1,24 +1,27 @@
 import { getCollection, type CollectionEntry } from "astro:content";
 
 export type BlogCategory =
-	| "chinh-sach-mat-hang"
-	| "thu-tuc-xnk"
-	| "cap-nhat-van-ban"
-	| "huong-dan";
+	| "cam-han-che"
+	| "xnk-co-dieu-kien"
+	| "kiem-tra-chuyen-nganh"
+	| "nhom-hang-nhap-khau"
+	| "nhom-hang-xuat-khau";
 
 export const CATEGORY_LABELS: Record<BlogCategory, string> = {
-	"chinh-sach-mat-hang": "Chính sách mặt hàng",
-	"thu-tuc-xnk": "Thủ tục XNK",
-	"cap-nhat-van-ban": "Cập nhật văn bản",
-	"huong-dan": "Hướng dẫn",
+	"cam-han-che": "Cấm, hạn chế & cấm tuyệt đối",
+	"xnk-co-dieu-kien": "XNK có điều kiện",
+	"kiem-tra-chuyen-nganh": "Kiểm tra chuyên ngành",
+	"nhom-hang-nhap-khau": "Nhóm hàng nhập khẩu",
+	"nhom-hang-xuat-khau": "Nhóm hàng xuất khẩu",
 };
 
 /** Mô tả ngắn cho menu / trang chủ đề */
 export const CATEGORY_HINTS: Record<BlogCategory, string> = {
-	"chinh-sach-mat-hang": "Quy định áp dụng theo nhóm mặt hàng và mã HS",
-	"thu-tuc-xnk": "Khai báo, chứng từ và các bước liên quan thông quan",
-	"cap-nhat-van-ban": "Văn bản mới, sửa đổi và điểm cần đối chiếu",
-	"huong-dan": "Hướng dẫn thực hành, danh mục kiểm tra và tra cứu",
+	"cam-han-che": "Rà soát trước ký hợp đồng để tránh nhóm hàng cấm hoặc hạn chế",
+	"xnk-co-dieu-kien": "Giấy phép, kiểm định và điều kiện bắt buộc theo từng nhóm hàng",
+	"kiem-tra-chuyen-nganh": "ATTP, kiểm dịch, nhãn năng lượng và yêu cầu cơ quan chuyên ngành",
+	"nhom-hang-nhap-khau": "Chuỗi công việc từ phân loại HS đến hoàn tất thông quan hàng nhập",
+	"nhom-hang-xuat-khau": "Lưu ý C/O, tiêu chuẩn thị trường đích và thủ tục trước khi xuất khẩu",
 };
 
 export function isBlogCategory(value: string): value is BlogCategory {

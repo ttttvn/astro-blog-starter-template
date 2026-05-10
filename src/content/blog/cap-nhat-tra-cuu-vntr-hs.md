@@ -2,8 +2,8 @@
 title: "Cập nhật quy trình tra cứu: VNTR và liên kết với phân loại HS"
 description: "Gợi ý cách dùng CSDL thương mại công khai để rà soát chính sách mặt hàng trước khi ký hợp đồng."
 pubDate: 2026-05-04
-category: "cap-nhat-van-ban"
-tags: ["VNTR", "HS", "CSDL-thương-mại"]
+category: "cam-han-che"
+tags: ["vntr", "hs", "ra-soat-truoc-hop-dong"]
 hsCodes: ["8517.12.00"]
 effectiveDate: 2026-05-04
 legalBasis:
